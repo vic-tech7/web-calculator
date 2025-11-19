@@ -1,12 +1,37 @@
 body {
-  background: linear-gradient(135deg, #6e8efb, #a777e3);
+  background-image: url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1920&q=80');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 20px;
+  color: white;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
   min-height: 100vh;
-  margin: 0;
-  font-family: 'Segoe UI', sans-serif;
+}
+
+.heading-container {
+  text-align: center;
   padding: 20px;
+  background-color: rgba(0,0,0,0.6);
+  border-radius: 12px;
+  max-width: 90%;
+  margin-bottom: 20px;
+}
+
+.heading-container h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.heading-container p {
+  margin: 5px 0;
+  font-size: 1rem;
+  opacity: 0.9;
 }
 
 .calculator {
