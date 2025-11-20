@@ -4,6 +4,7 @@ const clickSound = document.getElementById('click-sound');
 const historyPanel = document.getElementById('history-panel');
 const historyList = document.getElementById('history-list');
 const angleModeDisplay = document.getElementById('angle-mode');
+const allButtons = document.querySelectorAll('.scientific-grid button');
 
 let memoryRegister = 0;
 let angleMode = 'RAD'; 
@@ -34,18 +35,21 @@ function appendToDisplay(value) {
     currentInput += value;
     display.value = currentInput;
     playClickSound();
+    updateButtonHighlights();
 }
 
 function clearDisplay() {
     currentInput = '';
     display.value = '';
     playClickSound();
+    updateButtonHighlights();
 }
 
 function deleteLast() {
     currentInput = currentInput.slice(0, -1);
     display.value = currentInput;
     playClickSound();
+    updateButtonHighlights();
 }
 
 function toRadians(degrees) {
@@ -62,12 +66,23 @@ function factorial(n) {
     return result;
 }
 
+function parseAndExecuteExpression(expression) {
+    let safeExpression = expression
+        .replace(/π/g, Math.PI)
+        .replace(/e/g, Math.E)
+        .replace(/×/g, '*')
+        .replace(/–/g, '-')
+        .replace(/\^/g, '**');
+
+    const result = new Function('return ' + safeExpression)();
+    return result;
+}
+
 function calculate() {
     let expressionToSave = currentInput;
+    if (currentInput === '') return;
     try {
-        let expression = currentInput.replace(/×/g, '*').replace(/–/g, '-');
-        
-        let result = eval(expression);
+        let result = parseAndExecuteExpression(currentInput);
         
         result = parseFloat(result.toFixed(10));
         
@@ -80,6 +95,7 @@ function calculate() {
         currentInput = '';
     }
     playClickSound();
+    updateButtonHighlights();
 }
 
 function memoryAction(action) {
@@ -92,14 +108,13 @@ function memoryAction(action) {
         currentInput = memoryRegister.toString();
         display.value = currentInput;
     } else if (action === 'M+') {
-        memoryRegister += value;
+        if (!isNaN(value)) memoryRegister += value;
         clearDisplay(); 
     } else if (action === 'M-') {
-        memoryRegister -= value;
+        if (!isNaN(value)) memoryRegister -= value;
         clearDisplay();
-    } else if (action === 'MS' && !isNaN(value)) {
-        memoryRegister = value;
-    }
+    } 
+    updateButtonHighlights();
 }
 
 
@@ -107,6 +122,8 @@ function calculateAdvanced(operator) {
     playClickSound();
     
     let expression = currentInput;
+    let value = parseFloat(expression);
+    let result;
 
     if (operator === 'pi') {
         currentInput += Math.PI.toFixed(15);
@@ -115,53 +132,67 @@ function calculateAdvanced(operator) {
         currentInput += Math.E.toFixed(15);
     } 
     else if (operator === 'rand') {
-        currentInput = Math.random().toString();
+        currentInput += Math.random().toString();
     }
     else if (operator === 'pow') {
-            currentInput += "**"; 
+        currentInput += "**"; 
     }
-    else {
-        let value = parseFloat(expression);
-        
-        if (!isNaN(value)) {
-            let result;
-            let val = angleMode === 'DEG' ? toRadians(value) : value;
+    else if (!isNaN(value)) {
+        let val = angleMode === 'DEG' ? toRadians(value) : value;
 
-            switch(operator) {
-                case 'sqrt': result = Math.sqrt(value); break;
-                case 'cuberoot': result = Math.cbrt(value); break;
-                case 'log': result = Math.log10(value); break; 
-                case 'ln': result = Math.log(value); break; 
-                case 'sin': result = Math.sin(val); break;
-                case 'cos': result = Math.cos(val); break;
-                case 'tan': result = Math.tan(val); break;
-                case 'sinh': result = Math.sinh(value); break;
-                case 'cosh': result = Math.cosh(value); break;
-                case 'tanh': result = Math.tanh(value); break;
-                case 'x^2': result = Math.pow(value, 2); break;
-                case 'fact': result = factorial(value); break;
-                case 'inv': result = 1 / value; break;
-                case 'percent': result = value / 100; break;
-                default:
-                    currentInput += `${operator === 'x^2' ? 'Math.pow(' : `Math.${operator}(`}`;
-                    return;
-            }
+        switch(operator) {
+            case 'sqrt': result = Math.sqrt(value); break;
+            case 'cuberoot': result = Math.cbrt(value); break;
+            case 'log': result = Math.log10(value); break;
+            case 'ln': result = Math.log(value); break;
+            case 'sin': result = Math.sin(val); break;
+            case 'cos': result = Math.cos(val); break;
+            case 'tan': result = Math.tan(val); break;
+            case 'sinh': result = Math.sinh(value); break;
+            case 'cosh': result = Math.cosh(value); break;
+            case 'tanh': result = Math.tanh(value); break;
+            case 'x^2': result = Math.pow(value, 2); break;
+            case 'fact': result = factorial(value); break;
+            case 'inv': result = 1 / value; break;
+            case 'percent': result = value / 100; break;
+        }
 
-            if (!isNaN(result)) {
-                 currentInput = result.toFixed(10).toString(); 
-            } else {
-                currentInput = 'Invalid Input';
-            }
+        if (!isNaN(result)) {
+            currentInput = result.toFixed(10).replace(/\.?0+$/, '').toString(); 
         } else {
-             currentInput += `${operator === 'x^2' ? 'Math.pow(' : `Math.${operator}(`}`;
-             if(operator === 'fact' || operator === 'inv' || operator === 'percent') {
-                 currentInput = 'Error';
-             }
+            currentInput = 'Invalid Input';
+        }
+    } else {
+        currentInput += `${operator === 'x^2' ? 'Math.pow(' : `Math.${operator}(`}`;
+        if(['fact', 'inv', 'percent'].includes(operator)) {
+            currentInput = 'Error';
         }
     }
     
     display.value = currentInput;
+    updateButtonHighlights();
 }
+
+
+function updateButtonHighlights() {
+    allButtons.forEach(btn => btn.classList.remove('active-key'));
+    
+    if (currentInput === '') {
+        document.querySelectorAll('.num-btn, .dot-btn, .paren-btn:first-child, .constant-btn, .func-btn, .trig-btn').forEach(btn => btn.classList.add('active-key'));
+    } else {
+        const lastChar = currentInput.slice(-1);
+        const isOperator = ['+', '*', '/', '-', '**'].includes(lastChar);
+        const isNumber = /[0-9\.]/.test(lastChar);
+        const endsInParen = lastChar === '(';
+        
+        if (isOperator || endsInParen) {
+            document.querySelectorAll('.num-btn, .dot-btn, .paren-btn:first-child, .constant-btn, .func-btn, .trig-btn').forEach(btn => btn.classList.add('active-key'));
+        } else if (isNumber || lastChar === ')') {
+            document.querySelectorAll('.num-btn, .dot-btn, .operator-btn, .paren-btn:last-child, .equal-btn').forEach(btn => btn.classList.add('active-key'));
+        }
+    }
+}
+
 
 function toggleAngleMode() {
     if (angleMode === 'RAD') {
@@ -216,6 +247,7 @@ function renderHistory() {
             currentInput = item.result;
             display.value = currentInput;
             historyPanel.classList.remove('open');
+            updateButtonHighlights();
         };
         historyList.appendChild(li);
     });
@@ -250,6 +282,7 @@ function playClickSound() {
 
 document.addEventListener('keydown', function(event) {
     const key = event.key;
+
     if (/[0-9\.\+\-\*\/\(\)]/.test(key)) {
         appendToDisplay(key);
     } else if (key === 'Enter' || key === '=') {
@@ -259,5 +292,16 @@ document.addEventListener('keydown', function(event) {
         deleteLast();
     } else if (key === 'Escape') {
         clearDisplay();
+    } else if (key === '!') {
+        calculateAdvanced('fact');
+    } else if (key === '^') {
+        appendToDisplay('**'); 
+    } else if (key === '%') {
+        calculateAdvanced('percent');
+    } else if (document.querySelector(`.scientific-grid button:contains("${key}")`)) {
+        const button = document.querySelector(`.scientific-grid button:contains("${key}")`);
+        if (button) {
+            button.click();
+        }
     }
 });
