@@ -23,14 +23,30 @@ body {
     z-index: 10;
 }
 
+/* RESTORED AND MODIFIED HEADER STYLES */
 .heading-container {
-  /* Removed content, kept container for layout consistency */
-  height: 0; 
-  padding: 0; 
-  margin: 0; 
-  box-shadow: none; 
-  opacity: 0;
+  text-align: center;
+  background-color: rgba(0,0,0,0.6);
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 90%;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  /* REMOVED opacity: 0 and animation to ensure it's visible immediately */
+  z-index: 1; 
 }
+
+.heading-container h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.heading-container p {
+  margin: 5px 0;
+  font-size: 1rem;
+  opacity: 0.9;
+}
+
 
 .calculator {
   background-color: #fad609;
