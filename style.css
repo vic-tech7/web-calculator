@@ -7,7 +7,6 @@ body {
   background-attachment: fixed;
 
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
@@ -15,6 +14,13 @@ body {
   font-family: 'Segoe UI', sans-serif;
   padding: 20px;
   color: white;
+  position: relative; 
+}
+
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .heading-container {
@@ -27,6 +33,7 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
   opacity: 0;
   animation: fadeIn 2s ease-in-out forwards;
+  z-index: 10;
 }
 
 .heading-container h1 {
@@ -50,8 +57,8 @@ body {
   padding: 25px;
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.4);
-  width: 330px;
-  z-index: 2;
+  width: 450px;
+  z-index: 10;
 }
 
 #display {
@@ -69,60 +76,26 @@ body {
   box-shadow: inset 0 0 8px rgba(235, 2, 91, 0.7);
 }
 
-.buttons {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  margin-top: 15px;
-}
-
 .scientific-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 8px; /* Slightly reduced gap */
+  grid-template-columns: repeat(6, 1fr); 
+  gap: 8px; 
   margin-top: 15px;
-}
- 
-.scientific-grid button {
-    font-size: 1rem;
-    height: 48px;
-}
-
-.span-two-cols {
-    grid-column: span 2;
-}
-
-.scientific-grid .equals {
-    grid-column: span 2; 
-    grid-row: span 4; /* Stretched taller */
-    background: #00bcd4;
-    color: #000;
-    font-weight: bold;
-    font-size: 1.6rem;
-    height: auto; /* Allow height to be determined by grid-row-span */
-}
-
-.scientific-grid .equals:hover {
-  background-color: #00e5ff;
 }
 
 button {
-  font-size: 1.6rem;
-  background: #333333;
   color: white;
   border: none;
   border-radius: 12px;
-  height: 65px;
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 4px 6px rgba(228, 4, 4, 0.2);
-  position: relative;
-  overflow: hidden;
+  background: #333333;
 }
 
 button:hover {
   background-color: #10d341;
-  transform: scale(1.05);
+  transform: scale(1.03);
 }
 
 button:active {
@@ -130,15 +103,139 @@ button:active {
   background-color: #3709dd;
 }
 
-button:nth-child(odd) {
-  background-color: #057e05;
+.small-btn {
+    font-size: 1rem;
+    height: 48px;
 }
 
-/* Light/Dark Mode Switch */
+.large-btn {
+    font-size: 1.5rem;
+    height: 60px;
+    grid-column: span 1;
+}
+
+.large-btn:nth-child(n+13) {
+    grid-column: span 1; 
+}
+
+.equals-btn {
+  background: #00bcd4;
+  color: #000;
+  font-weight: bold;
+  grid-column: 5 / span 2;
+  grid-row: 4 / span 3;
+}
+
+.equals-btn:hover {
+  background-color: #00e5ff;
+}
+
+.equals-plus {
+    grid-column: 4 / span 1;
+}
+
+.span-two-cols {
+    grid-column: span 2; 
+}
+
+
+.scientific-grid button:nth-child(odd) {
+  background-color: #057e05;
+}
+.equals-btn, .equals-btn:hover, .equals-btn:active {
+    background: #00bcd4!important; 
+    color: #000!important;
+}
+
+#menu-button {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-size: 1.5rem;
+    padding: 10px 15px;
+    border-radius: 8px;
+    z-index: 10;
+    transition: background 0.3s;
+}
+
+#menu-button:hover {
+    background: rgba(255, 255, 255, 0.8);
+    color: #333;
+}
+
+.history-panel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 20px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
+    transform: translateX(-100%);
+    transition: transform 0.4s ease-in-out;
+    z-index: 100;
+}
+
+.history-panel.open {
+    transform: translateX(0);
+}
+
+.history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+.history-header button {
+    background: #e44d26;
+    color: white;
+    padding: 5px 10px;
+    font-size: 0.9rem;
+    border-radius: 5px;
+}
+
+#history-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: calc(100% - 120px);
+    overflow-y: auto;
+}
+
+#history-list li {
+    padding: 8px 0;
+    border-bottom: 1px dotted rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+}
+
+#history-list li:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.history-expression {
+    font-size: 0.9rem;
+    opacity: 0.7;
+    word-wrap: break-word;
+}
+
+.history-result {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fad609;
+}
+
 .theme-switch-wrapper {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  justify-content: flex-end;
 }
 .theme-switch {
   display: inline-block;
@@ -163,12 +260,12 @@ button:nth-child(odd) {
 .slider:before {
   background-color: #fff;
   bottom: 4px;
-  content: "";
-  height: 16px;
   left: 4px;
   position: absolute;
   transition: .4s;
   width: 16px;
+  height: 16px;
+  content: "";
 }
 input:checked + .slider {
   background-color: #2196F3;
@@ -183,7 +280,6 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-/* Light Mode Styles */
 body.light-theme {
   background-image: none;
   background-color: #f7f7f7;
@@ -210,11 +306,22 @@ body.light-theme .scientific-grid button:nth-child(odd) {
   background-color: #a4a4a4;
 }
 
-.scientific-grid button.equals {
-    grid-column: span 2; 
-    grid-row: span 4;
+.equals-btn {
+    background: #00bcd4!important; 
+    color: #000!important;
 }
 
-.scientific-grid button:nth-child(odd).equals {
-    background-color: #00bcd4; /* Prevent odd coloring on equals */
+body.light-theme .history-panel {
+    background: rgba(255, 255, 255, 0.95);
+    color: #333;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
+}
+body.light-theme .history-header {
+    border-bottom-color: rgba(0, 0, 0, 0.1);
+}
+body.light-theme #history-list li {
+    border-bottom-color: rgba(0, 0, 0, 0.05);
+}
+body.light-theme .history-result {
+    color: #e44d26;
 }
