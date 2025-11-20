@@ -21,34 +21,58 @@
     <header class="heading-container">
       <h1>QUE OS PARACE MI PRIMER WEB DE CALCULADORA?</h1>
       <p>How is my first calculator? Now SCIENTIFIC!</p>
-      <p><em>Created/Creado by/por VICTOR/CHAD<br />More updates coming soon: log, sin, cos...</em></p>
+      <p><em>Created/Creado by/por VICTOR/CHAD</em></p>
     </header>
 
     <div class="calculator">
-      <div class="theme-switch-wrapper">
-        <label class="theme-switch" for="checkbox">
-            <input type="checkbox" id="checkbox" checked />
-            <div class="slider round"></div>
-        </label>
-        <em style="font-style:normal; color:#333;">Dark Mode</em>
+      <div class="utility-row">
+        <span id="angle-mode" onclick="toggleAngleMode()">RAD</span>
+        <div class="theme-switch-wrapper">
+          <label class="theme-switch" for="checkbox">
+              <input type="checkbox" id="checkbox" checked />
+              <div class="slider round"></div>
+          </label>
+          <em style="font-style:normal; color:#333;">Dark Mode</em>
+        </div>
       </div>
       
       <input type="text" id="display" disabled />
+      
+
       <div class="buttons scientific-grid">
+        <!-- New Row: Memory and Utilities -->
+        <button class="small-btn mem-btn" onclick="memoryAction('MC')">MC</button>
+        <button class="small-btn mem-btn" onclick="memoryAction('MR')">MR</button>
+        <button class="small-btn mem-btn" onclick="memoryAction('M+')">M+</button>
+        <button class="small-btn mem-btn" onclick="memoryAction('M-')">M-</button>
+        <button class="small-btn" onclick="calculateAdvanced('percent')">%</button>
+        <button class="small-btn" onclick="calculateAdvanced('inv')">1/x</button>
+
+        <!-- Row 1: Scientific functions -->
         <button class="small-btn" onclick="appendToDisplay('(')">(</button>
         <button class="small-btn" onclick="appendToDisplay(')')">)</button>
         <button class="small-btn" onclick="calculateAdvanced('pi')">π</button>
-        <button class="small-btn" onclick="calculateAdvanced('sqrt')">√</button>
+        <button class="small-btn" onclick="calculateAdvanced('exp')">exp</button>
         <button class="small-btn" onclick="calculateAdvanced('log')">log</button>
         <button class="small-btn" onclick="calculateAdvanced('x^2')">x²</button>
   
+        <!-- Row 2: Trig Functions and Exp -->
         <button class="small-btn" onclick="calculateAdvanced('sin')">sin</button>
         <button class="small-btn" onclick="calculateAdvanced('cos')">cos</button>
         <button class="small-btn" onclick="calculateAdvanced('tan')">tan</button>
-        <button class="small-btn" onclick="calculateAdvanced('exp')">exp</button>
+        <button class="small-btn" onclick="calculateAdvanced('sinh')">sinh</button>
+        <button class="small-btn" onclick="calculateAdvanced('cosh')">cosh</button>
+        <button class="small-btn" onclick="calculateAdvanced('tanh')">tanh</button>
+
+        <!-- Row 3: More Functions -->
+        <button class="small-btn" onclick="calculateAdvanced('sqrt')">√</button>
+        <button class="small-btn" onclick="calculateAdvanced('cuberoot')">³√</button>
         <button class="small-btn" onclick="calculateAdvanced('pow')">x^y</button>
-        <button class="small-btn" onclick="calculateAdvanced('deg')">Deg</button>
+        <button class="small-btn" onclick="calculateAdvanced('fact')">x!</button>
+        <button class="small-btn" onclick="calculateAdvanced('e')">e</button>
+        <button class="small-btn" onclick="calculateAdvanced('rand')">RND</button>
   
+        <!-- Row 4-7: Standard Buttons (Large Buttons) -->
         <button class="large-btn" onclick="clearDisplay()">AC</button>
         <button class="large-btn" onclick="deleteLast()">⌫</button>
         <button class="large-btn" onclick="appendToDisplay('/')">/</button>
