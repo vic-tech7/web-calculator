@@ -2,45 +2,64 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>VEC Web Calculator</title>
+  <title>VEC Scientific Web Calculator</title>
   <link rel="stylesheet" href="style.css" />
+  <audio id="click-sound" src="click.mp3" preload="auto"></audio> 
 </head>
 <body>
-  
   <header class="heading-container">
     <h1>QUE OS PARACE MI PRIMER WEB DE CALCULADORA?</h1>
-    <p>How is my first calculator?</p>
-    <p><em>Created/Creado by/por VICTOR/CHAD<br />More updates coming soon</em></p>
+    <p>How is my first calculator? **Now SCIENTIFIC!**</p>
+    <p><em>Created/Creado by/por VICTOR/CHAD<br />More updates coming soon: log, sin, cos...</em></p>
   </header>
 
   <div class="calculator">
+    <div class="theme-switch-wrapper">
+      <label class="theme-switch" for="checkbox">
+          <input type="checkbox" id="checkbox" checked />
+          <div class="slider round"></div>
+      </label>
+      <em style="font-style:normal; color:#333;">Dark Mode</em>
+    </div>
+    
     <input type="text" id="display" disabled />
-    <div class="buttons">
-      <button onclick="clearDisplay()">C</button>
+    <div class="buttons scientific-grid">
+      <button onclick="appendToDisplay('(')">(</button>
+      <button onclick="appendToDisplay(')')">)</button>
+      <button onclick="calculateAdvanced('pi')">π</button>
+      <button onclick="calculateAdvanced('sqrt')">√</button>
+      <button onclick="calculateAdvanced('log')">log</button>
+      <button onclick="calculateAdvanced('x^2')">x²</button>
+
+      <button onclick="calculateAdvanced('sin')">sin</button>
+      <button onclick="calculateAdvanced('cos')">cos</button>
+      <button onclick="calculateAdvanced('tan')">tan</button>
+      <button onclick="calculateAdvanced('exp')">exp</button>
+      <button onclick="calculateAdvanced('pow')">x^y</button>
+       <button onclick="calculateAdvanced('rad')">Rad</button>
+
+      <button onclick="clearDisplay()">AC</button>
       <button onclick="deleteLast()">⌫</button>
       <button onclick="appendToDisplay('/')">/</button>
       <button onclick="appendToDisplay('*')">×</button>
-
+      <button class="equals span-two-cols" onclick="calculate()">=</button>
+      
       <button onclick="appendToDisplay('7')">7</button>
       <button onclick="appendToDisplay('8')">8</button>
       <button onclick="appendToDisplay('9')">9</button>
       <button onclick="appendToDisplay('-')">−</button>
-
+      
       <button onclick="appendToDisplay('4')">4</button>
       <button onclick="appendToDisplay('5')">5</button>
       <button onclick="appendToDisplay('6')">6</button>
       <button onclick="appendToDisplay('+')">+</button>
 
-      <button onclick="appendToDisplay('1')">1</button>
-      <button onclick="appendToDisplay('2')">2</button>
-      <button onclick="appendToDisplay('3')">3</button>
-      <button class="equals" onclick="calculate()">=</button>
-
-      <button onclick="appendToDisplay('0')">0</button>
+      <button class="span-two-cols" onclick="appendToDisplay('0')">0</button>
       <button onclick="appendToDisplay('.')">.</button>
+      
     </div>
   </div>
 
-  <script src="script.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
