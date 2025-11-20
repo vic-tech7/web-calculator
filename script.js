@@ -13,6 +13,15 @@ if (toggleSwitch) {
     toggleSwitch.checked = true;
 }
 
+document.addEventListener('click', function(event) {
+    const isHistoryButton = document.getElementById('menu-button').contains(event.target);
+    const inHistoryPanel = historyPanel.contains(event.target);
+    
+    if (historyPanel.classList.contains('open') && !isHistoryButton && !inHistoryPanel) {
+        historyPanel.classList.remove('open');
+    }
+});
+
 function appendToDisplay(value) {
     if (display.value === 'Error') {
         clearDisplay();
