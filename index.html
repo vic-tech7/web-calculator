@@ -5,24 +5,29 @@
   <title>VEC Scientific Web Calculator</title>
   <link rel="stylesheet" href="style.css" />
   <audio id="click-sound" src="click.mp3" preload="auto"></audio> 
+  <link rel="preload" as="image" href="https://source.unsplash.com/1600x900/?abstract,geometric" />
 </head>
-<body>
+<body style="background-image: url('https://source.unsplash.com/1600x900/?abstract,geometric');">
   <div id="history-panel" class="history-panel">
     <div class="history-header">
         <h2>Calculation History</h2>
         <button onclick="clearHistoryUI()">Clear History</button>
     </div>
     <ul id="history-list"></ul>
+    
+    <div class="utility-section">
+        <h3>Utilities</h3>
+        <button class="util-btn" onclick="openUnitConverter()">Unit Converter</button>
+        <button class="util-btn" onclick="openProgrammerMode()">Programmer Mode (Bin/Dec/Hex)</button>
+        <button class="util-btn" onclick="generateShareLink()">Share Calculation</button>
+        <button class="util-btn" onclick="changeBackground()">Dynamic Wallpaper</button>
+    </div>
   </div>
 
   <div class="main-content">
     <button id="menu-button" onclick="toggleHistoryPanel()">☰</button>
 
-    <header class="heading-container">
-      <h1>QUE OS PARACE MI PRIMER WEB DE CALCULADORA?</h1>
-      <p>How is my first calculator? Now SCIENTIFIC!</p>
-      <p><em>Created/Creado by/por VICTOR/CHAD</em></p>
-    </header>
+    <header class="heading-container"></header>
 
     <div class="calculator">
       <div class="utility-row">
@@ -40,7 +45,6 @@
       
 
       <div class="buttons scientific-grid">
-        <!-- New Row: Memory and Utilities -->
         <button class="small-btn mem-btn" onclick="memoryAction('MC')">MC</button>
         <button class="small-btn mem-btn" onclick="memoryAction('MR')">MR</button>
         <button class="small-btn mem-btn" onclick="memoryAction('M+')">M+</button>
@@ -48,7 +52,6 @@
         <button class="small-btn operator-btn" onclick="calculateAdvanced('percent')">%</button>
         <button class="small-btn operator-btn" onclick="calculateAdvanced('inv')">1/x</button>
 
-        <!-- Row 1: Scientific functions -->
         <button class="small-btn paren-btn" onclick="appendToDisplay('(')">(</button>
         <button class="small-btn paren-btn" onclick="appendToDisplay(')')">)</button>
         <button class="small-btn constant-btn" onclick="calculateAdvanced('pi')">π</button>
@@ -56,7 +59,6 @@
         <button class="small-btn func-btn" onclick="calculateAdvanced('log')">log</button>
         <button class="small-btn func-btn" onclick="calculateAdvanced('x^2')">x²</button>
   
-        <!-- Row 2: Trig Functions and Exp -->
         <button class="small-btn trig-btn" onclick="calculateAdvanced('sin')">sin</button>
         <button class="small-btn trig-btn" onclick="calculateAdvanced('cos')">cos</button>
         <button class="small-btn trig-btn" onclick="calculateAdvanced('tan')">tan</button>
@@ -64,15 +66,13 @@
         <button class="small-btn trig-btn" onclick="calculateAdvanced('cosh')">cosh</button>
         <button class="small-btn trig-btn" onclick="calculateAdvanced('tanh')">tanh</button>
 
-        <!-- Row 3: More Functions -->
         <button class="small-btn func-btn" onclick="calculateAdvanced('sqrt')">√</button>
         <button class="small-btn func-btn" onclick="calculateAdvanced('cuberoot')">³√</button>
-        <button class="small-btn operator-btn" onclick="calculateAdvanced('pow')">x^y</button>
+        <button class="small-btn operator-btn" onclick="appendToDisplay('^')">x^y</button>
         <button class="small-btn func-btn" onclick="calculateAdvanced('fact')">x!</button>
         <button class="small-btn constant-btn" onclick="calculateAdvanced('e')">e</button>
         <button class="small-btn func-btn" onclick="calculateAdvanced('rand')">RND</button>
   
-        <!-- Row 4-7: Standard Buttons (Large Buttons) -->
         <button class="large-btn clear-btn" onclick="clearDisplay()">AC</button>
         <button class="large-btn delete-btn" onclick="deleteLast()">⌫</button>
         <button class="large-btn operator-btn div-btn" onclick="appendToDisplay('/')">/</button>
@@ -97,6 +97,17 @@
         <button class="large-btn num-btn span-two-cols" onclick="appendToDisplay('0')">0</button>
         <button class="large-btn dot-btn" onclick="appendToDisplay('.')">.</button>
       </div>
+    </div>
+  </div>
+
+  <div id="programmer-overlay" class="overlay">
+    <div class="overlay-content">
+      <h2>Programmer Mode</h2>
+      <p>Enter a Decimal number:</p>
+      <input type="number" id="dec-input" value="0" oninput="convertBases()">
+      <p>Binary: <span id="bin-output">0</span></p>
+      <p>Hexadecimal: <span id="hex-output">0x0</span></p>
+      <button onclick="closeProgrammerMode()">Close</button>
     </div>
   </div>
 
