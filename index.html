@@ -45,57 +45,57 @@
         <button class="small-btn mem-btn" onclick="memoryAction('MR')">MR</button>
         <button class="small-btn mem-btn" onclick="memoryAction('M+')">M+</button>
         <button class="small-btn mem-btn" onclick="memoryAction('M-')">M-</button>
-        <button class="small-btn" onclick="calculateAdvanced('percent')">%</button>
-        <button class="small-btn" onclick="calculateAdvanced('inv')">1/x</button>
+        <button class="small-btn operator-btn" onclick="calculateAdvanced('percent')">%</button>
+        <button class="small-btn operator-btn" onclick="calculateAdvanced('inv')">1/x</button>
 
         <!-- Row 1: Scientific functions -->
-        <button class="small-btn" onclick="appendToDisplay('(')">(</button>
-        <button class="small-btn" onclick="appendToDisplay(')')">)</button>
-        <button class="small-btn" onclick="calculateAdvanced('pi')">π</button>
-        <button class="small-btn" onclick="calculateAdvanced('exp')">exp</button>
-        <button class="small-btn" onclick="calculateAdvanced('log')">log</button>
-        <button class="small-btn" onclick="calculateAdvanced('x^2')">x²</button>
+        <button class="small-btn paren-btn" onclick="appendToDisplay('(')">(</button>
+        <button class="small-btn paren-btn" onclick="appendToDisplay(')')">)</button>
+        <button class="small-btn constant-btn" onclick="calculateAdvanced('pi')">π</button>
+        <button class="small-btn func-btn" onclick="calculateAdvanced('exp')">exp</button>
+        <button class="small-btn func-btn" onclick="calculateAdvanced('log')">log</button>
+        <button class="small-btn func-btn" onclick="calculateAdvanced('x^2')">x²</button>
   
         <!-- Row 2: Trig Functions and Exp -->
-        <button class="small-btn" onclick="calculateAdvanced('sin')">sin</button>
-        <button class="small-btn" onclick="calculateAdvanced('cos')">cos</button>
-        <button class="small-btn" onclick="calculateAdvanced('tan')">tan</button>
-        <button class="small-btn" onclick="calculateAdvanced('sinh')">sinh</button>
-        <button class="small-btn" onclick="calculateAdvanced('cosh')">cosh</button>
-        <button class="small-btn" onclick="calculateAdvanced('tanh')">tanh</button>
+        <button class="small-btn trig-btn" onclick="calculateAdvanced('sin')">sin</button>
+        <button class="small-btn trig-btn" onclick="calculateAdvanced('cos')">cos</button>
+        <button class="small-btn trig-btn" onclick="calculateAdvanced('tan')">tan</button>
+        <button class="small-btn trig-btn" onclick="calculateAdvanced('sinh')">sinh</button>
+        <button class="small-btn trig-btn" onclick="calculateAdvanced('cosh')">cosh</button>
+        <button class="small-btn trig-btn" onclick="calculateAdvanced('tanh')">tanh</button>
 
         <!-- Row 3: More Functions -->
-        <button class="small-btn" onclick="calculateAdvanced('sqrt')">√</button>
-        <button class="small-btn" onclick="calculateAdvanced('cuberoot')">³√</button>
-        <button class="small-btn" onclick="calculateAdvanced('pow')">x^y</button>
-        <button class="small-btn" onclick="calculateAdvanced('fact')">x!</button>
-        <button class="small-btn" onclick="calculateAdvanced('e')">e</button>
-        <button class="small-btn" onclick="calculateAdvanced('rand')">RND</button>
+        <button class="small-btn func-btn" onclick="calculateAdvanced('sqrt')">√</button>
+        <button class="small-btn func-btn" onclick="calculateAdvanced('cuberoot')">³√</button>
+        <button class="small-btn operator-btn" onclick="calculateAdvanced('pow')">x^y</button>
+        <button class="small-btn func-btn" onclick="calculateAdvanced('fact')">x!</button>
+        <button class="small-btn constant-btn" onclick="calculateAdvanced('e')">e</button>
+        <button class="small-btn func-btn" onclick="calculateAdvanced('rand')">RND</button>
   
         <!-- Row 4-7: Standard Buttons (Large Buttons) -->
-        <button class="large-btn" onclick="clearDisplay()">AC</button>
-        <button class="large-btn" onclick="deleteLast()">⌫</button>
-        <button class="large-btn" onclick="appendToDisplay('/')">/</button>
-        <button class="large-btn" onclick="appendToDisplay('*')">×</button>
+        <button class="large-btn clear-btn" onclick="clearDisplay()">AC</button>
+        <button class="large-btn delete-btn" onclick="deleteLast()">⌫</button>
+        <button class="large-btn operator-btn div-btn" onclick="appendToDisplay('/')">/</button>
+        <button class="large-btn operator-btn mult-btn" onclick="appendToDisplay('*')">×</button>
         
-        <button class="large-btn" onclick="appendToDisplay('7')">7</button>
-        <button class="large-btn" onclick="appendToDisplay('8')">8</button>
-        <button class="large-btn" onclick="appendToDisplay('9')">9</button>
-        <button class="large-btn" onclick="appendToDisplay('-')">−</button>
+        <button class="large-btn num-btn" onclick="appendToDisplay('7')">7</button>
+        <button class="large-btn num-btn" onclick="appendToDisplay('8')">8</button>
+        <button class="large-btn num-btn" onclick="appendToDisplay('9')">9</button>
+        <button class="large-btn operator-btn sub-btn" onclick="appendToDisplay('-')">−</button>
         
-        <button class="large-btn" onclick="appendToDisplay('4')">4</button>
-        <button class="large-btn" onclick="appendToDisplay('5')">5</button>
-        <button class="large-btn" onclick="appendToDisplay('6')">6</button>
-        <button class="large-btn equals-plus" onclick="appendToDisplay('+')">+</button>
+        <button class="large-btn num-btn" onclick="appendToDisplay('4')">4</button>
+        <button class="large-btn num-btn" onclick="appendToDisplay('5')">5</button>
+        <button class="large-btn num-btn" onclick="appendToDisplay('6')">6</button>
+        <button class="large-btn equals-plus operator-btn add-btn" onclick="appendToDisplay('+')">+</button>
 
-        <button class="large-btn equals-btn span-two-cols" onclick="calculate()">=</button>
+        <button class="large-btn equals-btn equal-btn span-two-cols" onclick="calculate()">=</button>
 
-        <button class="large-btn" onclick="appendToDisplay('1')">1</button>
-        <button class="large-btn" onclick="appendToDisplay('2')">2</button>
-        <button class="large-btn" onclick="appendToDisplay('3')">3</button>
+        <button class="large-btn num-btn" onclick="appendToDisplay('1')">1</button>
+        <button class="large-btn num-btn" onclick="appendToDisplay('2')">2</button>
+        <button class="large-btn num-btn" onclick="appendToDisplay('3')">3</button>
 
-        <button class="large-btn span-two-cols" onclick="appendToDisplay('0')">0</button>
-        <button class="large-btn" onclick="appendToDisplay('.')">.</button>
+        <button class="large-btn num-btn span-two-cols" onclick="appendToDisplay('0')">0</button>
+        <button class="large-btn dot-btn" onclick="appendToDisplay('.')">.</button>
       </div>
     </div>
   </div>
