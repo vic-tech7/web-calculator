@@ -77,7 +77,7 @@ body {
     border-radius: 4px;
     cursor: pointer;
     font-size: 0.9rem;
-    transition: background-color 0.3s;
+    transition: all 0.3s;
 }
 #angle-mode.deg {
     background-color: #0d8327;
@@ -125,6 +125,14 @@ button:active {
   background-color: #3709dd;
 }
 
+/* Dynamic Highlighting (New Feature) */
+button.active-key {
+    background-color: #fff !important;
+    color: #333 !important;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.9);
+}
+
+
 .small-btn {
     font-size: 1rem;
     height: 48px;
@@ -136,7 +144,7 @@ button:active {
     grid-column: span 1;
 }
 
-.large-btn:nth-child(n+25) { /* Starts applying from AC/Clear button */
+.large-btn:nth-child(n+25) { 
     grid-column: span 1; 
 }
 
@@ -145,7 +153,7 @@ button:active {
   color: #000;
   font-weight: bold;
   grid-column: 5 / span 2;
-  grid-row: 6 / span 3; /* Adjusted for the extra row */
+  grid-row: 6 / span 3;
 }
 
 .equals-btn:hover {
@@ -160,7 +168,7 @@ button:active {
     grid-column: span 2; 
 }
 
-.scientific-grid button:nth-child(odd) {
+.scientific-grid button:nth-child(n+7):nth-child(-n+24):nth-child(odd) {
   background-color: #057e05;
 }
 
@@ -329,7 +337,7 @@ body.light-theme .scientific-grid button {
     background-color: #c9c9c9;
     color: #333;
 }
-body.light-theme .scientific-grid button:nth-child(odd) {
+body.light-theme .scientific-grid button:nth-child(n+7):nth-child(-n+24):nth-child(odd) {
   background-color: #a4a4a4;
 }
 
