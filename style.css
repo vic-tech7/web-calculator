@@ -14,14 +14,14 @@ body {
   font-family: 'Segoe UI', sans-serif;
   padding: 20px;
   color: white;
-  position: relative; /* Base for fixed elements */
+  position: relative;
 }
 
 .main-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    z-index: 10; /* Keep main content layered */
+    z-index: 10;
 }
 
 .heading-container {
@@ -59,7 +59,28 @@ body {
   border-radius: 15px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.4);
   width: 450px;
-  z-index: 5; /* Lowered z-index slightly */
+  z-index: 5;
+}
+
+.utility-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+#angle-mode {
+    font-weight: bold;
+    color: #fff;
+    background-color: #be2828;
+    padding: 2px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background-color 0.3s;
+}
+#angle-mode.deg {
+    background-color: #0d8327;
 }
 
 #display {
@@ -115,7 +136,7 @@ button:active {
     grid-column: span 1;
 }
 
-.large-btn:nth-child(n+13) {
+.large-btn:nth-child(n+25) { /* Starts applying from AC/Clear button */
     grid-column: span 1; 
 }
 
@@ -124,7 +145,7 @@ button:active {
   color: #000;
   font-weight: bold;
   grid-column: 5 / span 2;
-  grid-row: 4 / span 3;
+  grid-row: 6 / span 3; /* Adjusted for the extra row */
 }
 
 .equals-btn:hover {
@@ -139,17 +160,22 @@ button:active {
     grid-column: span 2; 
 }
 
-
 .scientific-grid button:nth-child(odd) {
   background-color: #057e05;
 }
+
+.mem-btn {
+    background-color: #33a7d4 !important;
+}
+
 .equals-btn, .equals-btn:hover, .equals-btn:active {
     background: #00bcd4!important; 
     color: #000!important;
 }
 
+
 #menu-button {
-    position: fixed; /* Changed to fixed so it's always visible */
+    position: fixed;
     top: 20px;
     left: 20px;
     background: rgba(255, 255, 255, 0.2);
@@ -157,7 +183,7 @@ button:active {
     font-size: 1.5rem;
     padding: 10px 15px;
     border-radius: 8px;
-    z-index: 110; /* HIGHER Z-INDEX HERE */
+    z-index: 110;
     transition: background 0.3s;
 }
 
@@ -236,7 +262,6 @@ button:active {
 .theme-switch-wrapper {
   display: flex;
   align-items: center;
-  margin-bottom: 15px;
   justify-content: flex-end;
 }
 .theme-switch {
@@ -306,6 +331,10 @@ body.light-theme .scientific-grid button {
 }
 body.light-theme .scientific-grid button:nth-child(odd) {
   background-color: #a4a4a4;
+}
+
+body.light-theme .mem-btn {
+    background-color: #5abde7 !important;
 }
 
 .equals-btn {
