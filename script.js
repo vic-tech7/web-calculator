@@ -9,15 +9,20 @@ const allButtons = document.querySelectorAll('.scientific-grid button');
 let memoryRegister = 0;
 let angleMode = 'RAD'; 
 
-loadHistory();
-updateAngleModeDisplay();
-
 const toggleSwitch = document.getElementById('checkbox');
 if (toggleSwitch) {
     toggleSwitch.addEventListener('change', switchTheme);
-    document.body.classList.remove('light-theme');
-    toggleSwitch.checked = true;
+    const isDark = localStorage.getItem('theme') === 'dark';
+    document.body.classList.toggle('light-theme', !isDark);
+    toggleSwitch.checked = isDark;
 }
+
+loadStateFromURL();
+if (currentInput === '') {
+    loadHistory();
+} 
+updateAngleModeDisplay();
+updateButtonHighlights();
 
 document.addEventListener('click', function(event) {
     const isHistoryButton = document.getElementById('menu-button').contains(event.target);
@@ -72,8 +77,13 @@ function parseAndExecuteExpression(expression) {
         .replace(/e/g, Math.E)
         .replace(/×/g, '*')
         .replace(/–/g, '-')
+        .replace(/x\^y/g, '**') 
         .replace(/\^/g, '**');
 
+    if (!/^[0-9\.\+\-\*\/\(\)\s\**]+$/.test(safeExpression)) {
+        throw new Error('Invalid characters in expression.');
+    }
+    
     const result = new Function('return ' + safeExpression)();
     return result;
 }
@@ -117,7 +127,6 @@ function memoryAction(action) {
     updateButtonHighlights();
 }
 
-
 function calculateAdvanced(operator) {
     playClickSound();
     
@@ -135,7 +144,7 @@ function calculateAdvanced(operator) {
         currentInput += Math.random().toString();
     }
     else if (operator === 'pow') {
-        currentInput += "**"; 
+        currentInput += "^"; 
     }
     else if (!isNaN(value)) {
         let val = angleMode === 'DEG' ? toRadians(value) : value;
@@ -155,6 +164,7 @@ function calculateAdvanced(operator) {
             case 'fact': result = factorial(value); break;
             case 'inv': result = 1 / value; break;
             case 'percent': result = value / 100; break;
+            default: result = value;
         }
 
         if (!isNaN(result)) {
@@ -173,7 +183,6 @@ function calculateAdvanced(operator) {
     updateButtonHighlights();
 }
 
-
 function updateButtonHighlights() {
     allButtons.forEach(btn => btn.classList.remove('active-key'));
     
@@ -181,7 +190,7 @@ function updateButtonHighlights() {
         document.querySelectorAll('.num-btn, .dot-btn, .paren-btn:first-child, .constant-btn, .func-btn, .trig-btn').forEach(btn => btn.classList.add('active-key'));
     } else {
         const lastChar = currentInput.slice(-1);
-        const isOperator = ['+', '*', '/', '-', '**'].includes(lastChar);
+        const isOperator = ['+', '*', '/', '-', '^', '**'].includes(lastChar);
         const isNumber = /[0-9\.]/.test(lastChar);
         const endsInParen = lastChar === '(';
         
@@ -193,13 +202,22 @@ function updateButtonHighlights() {
     }
 }
 
+function playClickSound() {
+    if(clickSound) {
+        clickSound.currentTime = 0;
+        clickSound.play();
+    }
+}
+
+function switchTheme(e) {
+    const theme = e.target.checked ? 'dark' : 'light';
+    localStorage.setItem('theme', theme);
+    document.body.classList.toggle('light-theme', theme === 'light');
+}
+
 
 function toggleAngleMode() {
-    if (angleMode === 'RAD') {
-        angleMode = 'DEG';
-    } else {
-        angleMode = 'RAD';
-    }
+    angleMode = angleMode === 'RAD' ? 'DEG' : 'RAD';
     updateAngleModeDisplay();
 }
 
@@ -211,6 +229,7 @@ function updateAngleModeDisplay() {
         angleModeDisplay.classList.remove('deg');
     }
 }
+
 
 function getHistory() {
     const history = localStorage.getItem('calcHistory');
@@ -233,11 +252,11 @@ function renderHistory() {
     const history = getHistory().reverse();
     
     if (history.length === 0) {
-        historyList.innerHTML = '<li>No history yet.</li>';
+        historyList.innerHTML = '<li style="color: #ccc;">No history yet.</li>';
         return;
     }
 
-    history.forEach((item, index) => {
+    history.forEach((item) => {
         const li = document.createElement('li');
         li.innerHTML = `
             <div class="history-expression">${item.expression}</div>
@@ -265,43 +284,118 @@ function toggleHistoryPanel() {
     }
 }
 
-function switchTheme(e) {
-    if (e.target.checked) {
-        document.body.classList.remove('light-theme');
-    } else {
-        document.body.classList.add('light-theme');
+function changeBackground() {
+    const newBg = `https://source.unsplash.com/1600x900/?abstract,geometric,wallpaper&${new Date().getTime()}`;
+    document.body.style.backgroundImage = `url('${newBg}')`;
+    historyPanel.classList.remove('open');
+    alert('Background image refreshed!');
+}
+
+function openProgrammerMode() {
+    document.getElementById('programmer-overlay').style.display = 'flex';
+    document.getElementById('dec-input').focus();
+    const result = parseFloat(currentInput);
+    if (!isNaN(result)) {
+        document.getElementById('dec-input').value = Math.floor(result);
+        convertBases();
     }
 }
 
-function playClickSound() {
-    if(clickSound) {
-        clickSound.currentTime = 0;
-        clickSound.play();
+function closeProgrammerMode() {
+    document.getElementById('programmer-overlay').style.display = 'none';
+    updateButtonHighlights();
+}
+
+function convertBases() {
+    const decInput = document.getElementById('dec-input').value;
+    const decimal = parseInt(decInput, 10);
+
+    if (isNaN(decimal) || decimal < 0) {
+        document.getElementById('bin-output').textContent = 'Invalid';
+        document.getElementById('hex-output').textContent = 'Invalid';
+        return;
     }
+
+    document.getElementById('bin-output').textContent = decimal.toString(2);
+    document.getElementById('hex-output').textContent = '0x' + decimal.toString(16).toUpperCase();
+}
+
+function generateShareLink() {
+    const encodedInput = encodeURIComponent(currentInput);
+    const encodedMemory = encodeURIComponent(memoryRegister.toString());
+    const mode = angleMode;
+
+    const shareUrl = `${window.location.protocol}//${window.location.host}${window.location.pathname}?input=${encodedInput}&mem=${encodedMemory}&mode=${mode}`;
+
+    navigator.clipboard.writeText(shareUrl).then(() => {
+        alert('Share link copied to clipboard!\n' + shareUrl);
+    }, () => {
+        prompt('Could not copy automatically. Copy this URL:', shareUrl);
+    });
+    historyPanel.classList.remove('open');
+}
+
+function loadStateFromURL() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const input = urlParams.get('input');
+    const memory = urlParams.get('mem');
+    const mode = urlParams.get('mode');
+
+    if (input) {
+        currentInput = decodeURIComponent(input);
+        display.value = currentInput;
+    }
+
+    if (memory && !isNaN(parseFloat(memory))) {
+        memoryRegister = parseFloat(decodeURIComponent(memory));
+    }
+
+    if (mode === 'DEG' || mode === 'RAD') {
+        angleMode = mode;
+    }
+    
+    if (input || memory || mode) {
+        window.history.pushState({}, document.title, window.location.pathname);
+    }
+}
+
+function openUnitConverter() {
+    alert('Unit Converter: Feature coming soon! But you now have the structure to build it.');
+    historyPanel.classList.remove('open');
 }
 
 document.addEventListener('keydown', function(event) {
+    if(document.getElementById('programmer-overlay').style.display === 'flex') {
+        return; 
+    }
+    
     const key = event.key;
+    const shift = event.shiftKey;
 
-    if (/[0-9\.\+\-\*\/\(\)]/.test(key)) {
+    if (/[0-9\.\(\)]/.test(key)) {
         appendToDisplay(key);
+    } else if (key === '+' || key === '-') {
+        appendToDisplay(key);
+    } else if (key === '*') {
+        appendToDisplay('×');
+    } else if (key === '/') {
+        appendToDisplay('/');
+        event.preventDefault(); 
     } else if (key === 'Enter' || key === '=') {
         calculate();
         event.preventDefault(); 
     } else if (key === 'Backspace') {
         deleteLast();
     } else if (key === 'Escape') {
-        clearDisplay();
-    } else if (key === '!') {
-        calculateAdvanced('fact');
-    } else if (key === '^') {
-        appendToDisplay('**'); 
-    } else if (key === '%') {
-        calculateAdvanced('percent');
-    } else if (document.querySelector(`.scientific-grid button:contains("${key}")`)) {
-        const button = document.querySelector(`.scientific-grid button:contains("${key}")`);
-        if (button) {
-            button.click();
+        closeProgrammerMode(); 
+        if(document.getElementById('programmer-overlay').style.display !== 'flex') {
+             clearDisplay();
         }
+    } else if (!shift && key === '!') {
+        calculateAdvanced('fact');
+    } else if (!shift && key === '^') {
+        appendToDisplay('**'); 
+    } else if (!shift && key === '%') {
+        calculateAdvanced('percent');
     }
 });
