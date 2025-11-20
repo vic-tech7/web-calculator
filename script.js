@@ -1,8 +1,22 @@
 let display = document.getElementById('display');
 let currentInput = '';
 const clickSound = document.getElementById('click-sound');
+const historyPanel = document.getElementById('history-panel');
+const historyList = document.getElementById('history-list');
+
+loadHistory();
+
+const toggleSwitch = document.getElementById('checkbox');
+if (toggleSwitch) {
+    toggleSwitch.addEventListener('change', switchTheme);
+    document.body.classList.remove('light-theme');
+    toggleSwitch.checked = true;
+}
 
 function appendToDisplay(value) {
+    if (display.value === 'Error') {
+        clearDisplay();
+    }
     currentInput += value;
     display.value = currentInput;
     playClickSound();
@@ -21,12 +35,15 @@ function deleteLast() {
 }
 
 function calculate() {
+    let expressionToSave = currentInput;
     try {
-        let expression = currentInput.replace(/×/g, '*')
-                                     .replace(/–/g, '-');
+        let expression = currentInput.replace(/×/g, '*').replace(/–/g, '-');
         
         let result = eval(expression);
         
+        result = parseFloat(result.toFixed(10));
+        
+        saveHistory(expressionToSave, result.toString());
         currentInput = result.toString();
         display.value = result;
         
@@ -40,69 +57,93 @@ function calculate() {
 function calculateAdvanced(operator) {
     playClickSound();
     
-    let value;
-    
-    if (operator === 'pi') {
-        value = Math.PI;
-    } else {
-        value = parseFloat(currentInput); 
-    }
+    let expression = currentInput;
 
-    switch(operator) {
-        case 'pi': 
-            currentInput = value.toFixed(8).toString();
-            break;
-        case 'sqrt':
-            if (value >= 0) {
-                currentInput = Math.sqrt(value).toString();
+    if (operator === 'pi') {
+        currentInput += Math.PI.toFixed(10);
+    } 
+    else if (['sqrt', 'log', 'sin', 'cos', 'tan', 'exp', 'x^2', 'deg'].includes(operator)) {
+        let value = parseFloat(expression);
+        
+        if (!isNaN(value) && expression.trim() === value.toString().trim()) {
+            let result;
+            switch(operator) {
+                case 'sqrt': result = Math.sqrt(value); break;
+                case 'log': result = Math.log(value); break;
+                case 'sin': result = Math.sin(value); break;
+                case 'cos': result = Math.cos(value); break;
+                case 'tan': result = Math.tan(value); break;
+                case 'exp': result = Math.exp(value); break;
+                case 'x^2': result = Math.pow(value, 2); break;
+                case 'deg': result = value * (180 / Math.PI); break;
+            }
+            if (!isNaN(result)) {
+                 currentInput = result.toFixed(10).toString(); 
             } else {
                 currentInput = 'Invalid Input';
             }
-            break;
-        case 'log':
-             if (value > 0) {
-                currentInput = Math.log(value).toFixed(4).toString();
-            } else {
-                 currentInput = 'Invalid Input';
-            }
-            break;
-        case 'sin':
-            currentInput = Math.sin(value).toFixed(4).toString();
-            break;
-        case 'cos':
-            currentInput = Math.cos(value).toFixed(4).toString();
-            break;
-        case 'tan':
-            currentInput = Math.tan(value).toFixed(4).toString();
-            break;
-        case 'exp':
-            currentInput = Math.exp(value).toFixed(4).toString();
-             break;
-        case 'x^2':
-            currentInput = Math.pow(value, 2).toString();
-            break;
-        case 'pow':
+        } else {
+             currentInput += `${operator === 'x^2' ? 'Math.pow(' : `Math.${operator}(`}`;
+        }
+    } 
+    else if (operator === 'pow') {
             currentInput += "**"; 
-            break;
-        case 'rad': 
-            currentInput = (value * (Math.PI / 180)).toFixed(4).toString();
-            break;
-
-        default:
-            return;
     }
     
     display.value = currentInput;
 }
 
-function playClickSound() {
-    if(clickSound) {
-        clickSound.currentTime = 0;
-        clickSound.play();
-    }
+function getHistory() {
+    const history = localStorage.getItem('calcHistory');
+    return history ? JSON.parse(history) : [];
 }
 
-const toggleSwitch = document.getElementById('checkbox');
+function saveHistory(expression, result) {
+    const history = getHistory();
+    history.push({ expression: expression, result: result });
+    localStorage.setItem('calcHistory', JSON.stringify(history));
+    renderHistory();
+}
+
+function loadHistory() {
+    renderHistory();
+}
+
+function renderHistory() {
+    historyList.innerHTML = '';
+    const history = getHistory().reverse();
+    
+    if (history.length === 0) {
+        historyList.innerHTML = '<li>No history yet.</li>';
+        return;
+    }
+
+    history.forEach((item, index) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+            <div class="history-expression">${item.expression}</div>
+            <div class="history-result">= ${item.result}</div>
+        `;
+        li.onclick = () => {
+            currentInput = item.result;
+            display.value = currentInput;
+            historyPanel.classList.remove('open');
+        };
+        historyList.appendChild(li);
+    });
+}
+
+function clearHistoryUI() {
+    localStorage.removeItem('calcHistory');
+    renderHistory();
+}
+
+function toggleHistoryPanel() {
+    historyPanel.classList.toggle('open');
+    if (historyPanel.classList.contains('open')) {
+        renderHistory();
+    }
+}
 
 function switchTheme(e) {
     if (e.target.checked) {
@@ -112,10 +153,11 @@ function switchTheme(e) {
     }
 }
 
-if (toggleSwitch) {
-    toggleSwitch.addEventListener('change', switchTheme);
-    document.body.classList.remove('light-theme');
-    toggleSwitch.checked = true;
+function playClickSound() {
+    if(clickSound) {
+        clickSound.currentTime = 0;
+        clickSound.play();
+    }
 }
 
 document.addEventListener('keydown', function(event) {
