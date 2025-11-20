@@ -3,8 +3,13 @@ let currentInput = '';
 const clickSound = document.getElementById('click-sound');
 const historyPanel = document.getElementById('history-panel');
 const historyList = document.getElementById('history-list');
+const angleModeDisplay = document.getElementById('angle-mode');
+
+let memoryRegister = 0;
+let angleMode = 'RAD'; 
 
 loadHistory();
+updateAngleModeDisplay();
 
 const toggleSwitch = document.getElementById('checkbox');
 if (toggleSwitch) {
@@ -43,6 +48,20 @@ function deleteLast() {
     playClickSound();
 }
 
+function toRadians(degrees) {
+    return degrees * (Math.PI / 180);
+}
+
+function factorial(n) {
+    if (n < 0 || n % 1 !== 0) return NaN;
+    if (n === 0 || n === 1) return 1;
+    let result = 1;
+    for (let i = 2; i <= n; i++) {
+        result *= i;
+    }
+    return result;
+}
+
 function calculate() {
     let expressionToSave = currentInput;
     try {
@@ -63,29 +82,71 @@ function calculate() {
     playClickSound();
 }
 
+function memoryAction(action) {
+    playClickSound();
+    let value = parseFloat(currentInput);
+
+    if (action === 'MC') {
+        memoryRegister = 0;
+    } else if (action === 'MR' && !isNaN(memoryRegister)) {
+        currentInput = memoryRegister.toString();
+        display.value = currentInput;
+    } else if (action === 'M+') {
+        memoryRegister += value;
+        clearDisplay(); 
+    } else if (action === 'M-') {
+        memoryRegister -= value;
+        clearDisplay();
+    } else if (action === 'MS' && !isNaN(value)) {
+        memoryRegister = value;
+    }
+}
+
+
 function calculateAdvanced(operator) {
     playClickSound();
     
     let expression = currentInput;
 
     if (operator === 'pi') {
-        currentInput += Math.PI.toFixed(10);
+        currentInput += Math.PI.toFixed(15);
     } 
-    else if (['sqrt', 'log', 'sin', 'cos', 'tan', 'exp', 'x^2', 'deg'].includes(operator)) {
+    else if (operator === 'e') {
+        currentInput += Math.E.toFixed(15);
+    } 
+    else if (operator === 'rand') {
+        currentInput = Math.random().toString();
+    }
+    else if (operator === 'pow') {
+            currentInput += "**"; 
+    }
+    else {
         let value = parseFloat(expression);
         
-        if (!isNaN(value) && expression.trim() === value.toString().trim()) {
+        if (!isNaN(value)) {
             let result;
+            let val = angleMode === 'DEG' ? toRadians(value) : value;
+
             switch(operator) {
                 case 'sqrt': result = Math.sqrt(value); break;
-                case 'log': result = Math.log(value); break;
-                case 'sin': result = Math.sin(value); break;
-                case 'cos': result = Math.cos(value); break;
-                case 'tan': result = Math.tan(value); break;
-                case 'exp': result = Math.exp(value); break;
+                case 'cuberoot': result = Math.cbrt(value); break;
+                case 'log': result = Math.log10(value); break; 
+                case 'ln': result = Math.log(value); break; 
+                case 'sin': result = Math.sin(val); break;
+                case 'cos': result = Math.cos(val); break;
+                case 'tan': result = Math.tan(val); break;
+                case 'sinh': result = Math.sinh(value); break;
+                case 'cosh': result = Math.cosh(value); break;
+                case 'tanh': result = Math.tanh(value); break;
                 case 'x^2': result = Math.pow(value, 2); break;
-                case 'deg': result = value * (180 / Math.PI); break;
+                case 'fact': result = factorial(value); break;
+                case 'inv': result = 1 / value; break;
+                case 'percent': result = value / 100; break;
+                default:
+                    currentInput += `${operator === 'x^2' ? 'Math.pow(' : `Math.${operator}(`}`;
+                    return;
             }
+
             if (!isNaN(result)) {
                  currentInput = result.toFixed(10).toString(); 
             } else {
@@ -93,13 +154,31 @@ function calculateAdvanced(operator) {
             }
         } else {
              currentInput += `${operator === 'x^2' ? 'Math.pow(' : `Math.${operator}(`}`;
+             if(operator === 'fact' || operator === 'inv' || operator === 'percent') {
+                 currentInput = 'Error';
+             }
         }
-    } 
-    else if (operator === 'pow') {
-            currentInput += "**"; 
     }
     
     display.value = currentInput;
+}
+
+function toggleAngleMode() {
+    if (angleMode === 'RAD') {
+        angleMode = 'DEG';
+    } else {
+        angleMode = 'RAD';
+    }
+    updateAngleModeDisplay();
+}
+
+function updateAngleModeDisplay() {
+    angleModeDisplay.textContent = angleMode;
+    if (angleMode === 'DEG') {
+        angleModeDisplay.classList.add('deg');
+    } else {
+        angleModeDisplay.classList.remove('deg');
+    }
 }
 
 function getHistory() {
