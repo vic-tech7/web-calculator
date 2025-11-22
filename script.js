@@ -285,10 +285,26 @@ function toggleHistoryPanel() {
 }
 
 function changeBackground() {
-    const newBg = `https://source.unsplash.com/1600x900/?abstract,geometric,wallpaper&${new Date().getTime()}`;
-    document.body.style.backgroundImage = `url('${newBg}')`;
     historyPanel.classList.remove('open');
-    alert('Background image refreshed!');
+    const newBgUrl = prompt("Enter a Wallpaper URL, or press OK to get a new random image.", "");
+
+    let finalUrl;
+    if (newBgUrl && newBgUrl.trim() !== "") {
+        finalUrl = newBgUrl;
+    } else {
+        // Use a high-quality, free-to-use image host with a strong cache-buster
+        finalUrl = `https://picsum.photos/1600/900?random=${new Date().getTime()}`;
+    }
+
+    const img = new Image();
+    img.onload = () => {
+        document.body.style.backgroundImage = `url('${finalUrl}')`;
+        alert('Wallpaper changed successfully!');
+    };
+    img.onerror = () => {
+        alert('Error: Could not load the image from that URL. Sticking with the current background.');
+    };
+    img.src = finalUrl;
 }
 
 function openProgrammerMode() {
