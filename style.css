@@ -1,4 +1,5 @@
 body {
+  background-image: url('https://source.unsplash.com/1600x900/?abstract,geometric');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -23,7 +24,6 @@ body {
     z-index: 10;
 }
 
-/* RESTORED AND MODIFIED HEADER STYLES */
 .heading-container {
   text-align: center;
   background-color: rgba(0,0,0,0.6);
@@ -32,7 +32,6 @@ body {
   max-width: 90%;
   margin-bottom: 20px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  /* REMOVED opacity: 0 and animation to ensure it's visible immediately */
   z-index: 1; 
 }
 
@@ -344,6 +343,8 @@ input:checked + .slider:before {
 }
 
 body.light-theme {
+    background-image: none !important; /* Remove the image in light mode */
+    background-color: #f7f7f7 !important; /* Set a clean light background color */
     background-blend-mode: saturation;
 }
 
