@@ -286,7 +286,7 @@ function toggleHistoryPanel() {
 
 function changeBackground() {
     historyPanel.classList.remove('open');
-    const newBgUrl = prompt("Enter a Wallpaper URL, or press OK to get a new random image.", "");
+    const newBgUrl = prompt("Enter a Wallpaper URL, or press OK to get a new random image. 😋", "");
 
     let finalUrl;
     if (newBgUrl && newBgUrl.trim() !== "") {
@@ -299,7 +299,7 @@ function changeBackground() {
     const img = new Image();
     img.onload = () => {
         document.body.style.backgroundImage = `url('${finalUrl}')`;
-        alert('Wallpaper changed successfully!');
+        alert('Wallpaper changed successfully! 😊');
     };
     img.onerror = () => {
         alert('Error: Could not load the image from that URL. Sticking with the current background.');
@@ -376,7 +376,7 @@ function loadStateFromURL() {
 }
 
 function openUnitConverter() {
-    alert('Unit Converter: Feature coming soon! But you now have the structure to build it.');
+    alert('Unit Converter: Feature coming soon! STAY TUNED');
     historyPanel.classList.remove('open');
 }
 
