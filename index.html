@@ -13,7 +13,6 @@
         <button onclick="clearHistoryUI()">Clear History</button>
     </div>
     <ul id="history-list"></ul>
-    
     <div class="utility-section">
         <h3>Utilities</h3>
         <button class="util-btn" onclick="openUnitConverter()">Unit Converter</button>
@@ -23,16 +22,13 @@
         <button class="util-btn" onclick="changeBackground()">Dynamic Wallpaper</button>
     </div>
   </div>
-
   <div class="main-content">
     <button id="menu-button" onclick="toggleHistoryPanel()">☰</button>
-
     <header class="heading-container">
         <h1>VEC Scientific Web Calculator</h1>
         <p>How is my first calculator? Now SCIENTIFIC!</p>
         <p><em>Created/Creado by/por VICTOR/CHAD</em></p>
     </header>
-
     <div class="calculator">
       <div class="utility-row">
         <span id="angle-mode" onclick="toggleAngleMode()">RAD</span>
@@ -44,10 +40,7 @@
           <em style="font-style:normal; color:#333;">Dark Mode</em>
         </div>
       </div>
-      
       <input type="text" id="display" disabled />
-      
-
       <div class="buttons scientific-grid">
         <button class="small-btn mem-btn" onclick="memoryAction('MC')">MC</button>
         <button class="small-btn mem-btn" onclick="memoryAction('MR')">MR</button>
@@ -55,7 +48,6 @@
         <button class="small-btn mem-btn" onclick="memoryAction('M-')">M-</button>
         <button class="small-btn operator-btn" onclick="calculateAdvanced('percent')">%</button>
         <button class="small-btn operator-btn" onclick="calculateAdvanced('inv')">1/x</button>
-
         <button class="small-btn paren-btn" onclick="appendToDisplay('(')">(</button>
         <button class="small-btn paren-btn" onclick="appendToDisplay(')')">)</button>
         <button class="small-btn constant-btn" onclick="calculateAdvanced('pi')">π</button>
@@ -103,8 +95,6 @@
       </div>
     </div>
   </div>
-
-
   <div id="programmer-overlay" class="overlay">
     <div class="overlay-content">
       <h2>Programmer Mode</h2>
@@ -115,7 +105,6 @@
       <button onclick="closeProgrammerMode()">Close</button>
     </div>
   </div>
-
   <div id="unit-converter-overlay" class="overlay">
     <div class="overlay-content" style="max-width: 500px; text-align: left;">
       <h2>Unit Converter (Length)</h2>
@@ -139,7 +128,26 @@
       <button onclick="closeUnitConverter()" style="float: right;">Close</button>
     </div>
   </div>
-
+  <div id="ai-chat-overlay" class="overlay ai-chat-overlay">
+    <div class="overlay-content ai-chat-window">
+      <div class="ai-chat-header">
+        <h2>VEC AI Security Assistant</h2>
+        <button onclick="closeAIChat()">×</button>
+      </div>
+      <div class="ai-chat-messages" id="ai-chat-messages">
+        <div class="message received">
+          <strong>VEC AI:</strong> Hello! I'm your AI Penetration Testing Assistant. How can I help you today?
+        </div>
+      </div>
+      <div class="ai-chat-input-area">
+        <textarea id="ai-user-input" placeholder="Ask about exploits, tools, or paste code..." rows="2"></textarea>
+        <button onclick="sendAIQuery()">Send</button>
+      </div>
+      <div class="ai-chat-note">
+        <em>Note: This demo shows the UI. A real assistant would need a backend service connected.</em>
+      </div>
+    </div>
+  </div>
 <script src="script.js"></script>
 </body>
 </html>
