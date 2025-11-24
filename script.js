@@ -487,7 +487,7 @@ function appendAIMessage(text, sender, isTyping = false) {
 function getAIGeneralResponse(userInput) {
    const lowerInput = userInput.toLowerCase().trim();
    if (/^(hello|hi|hey|greetings)/i.test(lowerInput)) {
-       return "Hi there! I’m your multi-functional assistant. Whether it’s answering daily questions or helping secure systems—just tell me what you need!";
+       return "Hi there! I’m your multi-functional vec ai assistant. CREATED BY VICTOR —just tell me what you need!";
    }
 
    if (/\bwhat is \d+(?:\s*[\+\-\*\/]\s*\d+)+\??/.test(lowerInput)) {
