@@ -9,7 +9,7 @@
 <body>
   <div id="history-panel" class="history-panel">
     <div class="history-header">
-        <h2>Calculation History🙃</h2>
+        <h2>Calculation History</h2>
         <button onclick="clearHistoryUI()">Clear History</button>
     </div>
     <ul id="history-list"></ul>
@@ -18,8 +18,9 @@
         <h3>Utilities</h3>
         <button class="util-btn" onclick="openUnitConverter()">Unit Converter</button>
         <button class="util-btn" onclick="openProgrammerMode()">Programmer Mode (Bin/Dec/Hex)</button>
+        <button class="util-btn" onclick="openAISecurityAssistant()">AI Security Assistant</button>
         <button class="util-btn" onclick="generateShareLink()">Share Calculation</button>
-        <button class="util-btn" onclick="changeBackground()">Dynamic Wallpaper🙂‍↕️</button>
+        <button class="util-btn" onclick="changeBackground()">Dynamic Wallpaper</button>
     </div>
   </div>
 
@@ -27,8 +28,8 @@
     <button id="menu-button" onclick="toggleHistoryPanel()">☰</button>
 
     <header class="heading-container">
-        <h1>VEC Scientific Web Calculator😮‍💨</h1>
-        <p>How is my first calculator? Now SCIENTIFIC!🤭</p>
+        <h1>VEC Scientific Web Calculator</h1>
+        <p>How is my first calculator? Now SCIENTIFIC!</p>
         <p><em>Created/Creado by/por VICTOR/CHAD</em></p>
     </header>
 
@@ -103,6 +104,7 @@
     </div>
   </div>
 
+
   <div id="programmer-overlay" class="overlay">
     <div class="overlay-content">
       <h2>Programmer Mode</h2>
@@ -111,6 +113,30 @@
       <p>Binary: <span id="bin-output">0</span></p>
       <p>Hexadecimal: <span id="hex-output">0x0</span></p>
       <button onclick="closeProgrammerMode()">Close</button>
+    </div>
+  </div>
+
+  <div id="unit-converter-overlay" class="overlay">
+    <div class="overlay-content" style="max-width: 500px; text-align: left;">
+      <h2>Unit Converter (Length)</h2>
+      <div class="converter-input-group">
+        <label for="input-unit">Convert From:</label>
+        <input type="number" id="input-value" value="1" oninput="convertUnits()">
+        <select id="input-unit" onchange="convertUnits()">
+          <option value="meters">Meters (m)</option>
+          <option value="feet">Feet (ft)</option>
+          <option value="kilometers">Kilometers (km)</option>
+          <option value="miles">Miles (mi)</option>
+        </select>
+      </div>
+      
+      <h3 style="margin-top: 20px; border-bottom: 1px solid #777; padding-bottom: 5px;">Results:</h3>
+      <p>Meters (m): <span id="output-meters" class="unit-result"></span></p>
+      <p>Feet (ft): <span id="output-feet" class="unit-result"></span></p>
+      <p>Kilometers (km): <span id="output-kilometers" class="unit-result"></span></p>
+      <p>Miles (mi): <span id="output-miles" class="unit-result"></span></p>
+      
+      <button onclick="closeUnitConverter()" style="float: right;">Close</button>
     </div>
   </div>
 
