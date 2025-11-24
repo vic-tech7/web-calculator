@@ -6,6 +6,18 @@ const historyList = document.getElementById('history-list');
 const angleModeDisplay = document.getElementById('angle-mode');
 const allButtons = document.querySelectorAll('.scientific-grid button');
 
+const programmerOverlay = document.getElementById('programmer-overlay');
+const decInput = document.getElementById('dec-input');
+
+const unitConverterOverlay = document.getElementById('unit-converter-overlay');
+const inputValue = document.getElementById('input-value');
+const inputUnit = document.getElementById('input-unit');
+const outputMeters = document.getElementById('output-meters');
+const outputFeet = document.getElementById('output-feet');
+const outputKilometers = document.getElementById('output-kilometers');
+const outputMiles = document.getElementById('output-miles');
+
+
 let memoryRegister = 0;
 let angleMode = 'RAD'; 
 
@@ -30,6 +42,51 @@ document.addEventListener('click', function(event) {
     
     if (historyPanel.classList.contains('open') && !isHistoryButton && !inHistoryPanel) {
         historyPanel.classList.remove('open');
+    }
+});
+
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        if(programmerOverlay.style.display === 'flex') {
+            closeProgrammerMode();
+        } else if (unitConverterOverlay.style.display === 'flex') {
+            closeUnitConverter();
+        } else {
+             if(currentInput !== '') clearDisplay();
+        }
+    }
+    
+    if(programmerOverlay.style.display === 'flex' || unitConverterOverlay.style.display === 'flex') {
+        if(event.key === 'Enter') {
+             if(programmerOverlay.style.display === 'flex') convertBases();
+             else if (unitConverterOverlay.style.display === 'flex') convertUnits();
+        }
+        return; 
+    }
+    
+    const key = event.key;
+    const shift = event.shiftKey;
+
+    if (/[0-9\.\(\)]/.test(key)) {
+        appendToDisplay(key);
+    } else if (key === '+' || key === '-') {
+        appendToDisplay(key);
+    } else if (key === '*') {
+        appendToDisplay('×');
+    } else if (key === '/') {
+        appendToDisplay('/');
+        event.preventDefault(); 
+    } else if (key === 'Enter' || key === '=') {
+        calculate();
+        event.preventDefault(); 
+    } else if (key === 'Backspace') {
+        deleteLast();
+    } else if (!shift && key === '!') {
+        calculateAdvanced('fact');
+    } else if (!shift && key === '^') {
+        appendToDisplay('^'); 
+    } else if (!shift && key === '%') {
+        calculateAdvanced('percent');
     }
 });
 
@@ -77,7 +134,6 @@ function parseAndExecuteExpression(expression) {
         .replace(/e/g, Math.E)
         .replace(/×/g, '*')
         .replace(/–/g, '-')
-        .replace(/x\^y/g, '**') 
         .replace(/\^/g, '**');
 
     if (!/^[0-9\.\+\-\*\/\(\)\s\**]+$/.test(safeExpression)) {
@@ -286,20 +342,19 @@ function toggleHistoryPanel() {
 
 function changeBackground() {
     historyPanel.classList.remove('open');
-    const newBgUrl = prompt("Enter a Wallpaper URL, or press OK to get a new random image. 😋", "");
+    const newBgUrl = prompt("Enter a Wallpaper URL, or press OK to get a new random image.", "");
 
     let finalUrl;
     if (newBgUrl && newBgUrl.trim() !== "") {
         finalUrl = newBgUrl;
     } else {
-        // Use a high-quality, free-to-use image host with a strong cache-buster
         finalUrl = `https://picsum.photos/1600/900?random=${new Date().getTime()}`;
     }
 
     const img = new Image();
     img.onload = () => {
         document.body.style.backgroundImage = `url('${finalUrl}')`;
-        alert('Wallpaper changed successfully! 😊');
+        alert('Wallpaper changed successfully!');
     };
     img.onerror = () => {
         alert('Error: Could not load the image from that URL. Sticking with the current background.');
@@ -308,33 +363,118 @@ function changeBackground() {
 }
 
 function openProgrammerMode() {
-    document.getElementById('programmer-overlay').style.display = 'flex';
-    document.getElementById('dec-input').focus();
+    programmerOverlay.style.display = 'flex';
+    decInput.focus();
     const result = parseFloat(currentInput);
     if (!isNaN(result)) {
-        document.getElementById('dec-input').value = Math.floor(result);
+        decInput.value = Math.floor(result);
+        convertBases();
+    } else {
+        decInput.value = 0;
         convertBases();
     }
+    historyPanel.classList.remove('open');
 }
 
 function closeProgrammerMode() {
-    document.getElementById('programmer-overlay').style.display = 'none';
+    programmerOverlay.style.display = 'none';
+    currentInput = decInput.value;
+    display.value = currentInput;
     updateButtonHighlights();
 }
 
 function convertBases() {
-    const decInput = document.getElementById('dec-input').value;
-    const decimal = parseInt(decInput, 10);
-
+    const decimal = parseInt(decInput.value, 10);
+    const binOutput = document.getElementById('bin-output');
+    const hexOutput = document.getElementById('hex-output');
+    
     if (isNaN(decimal) || decimal < 0) {
-        document.getElementById('bin-output').textContent = 'Invalid';
-        document.getElementById('hex-output').textContent = 'Invalid';
+        binOutput.textContent = 'Invalid';
+        hexOutput.textContent = 'Invalid';
         return;
     }
 
-    document.getElementById('bin-output').textContent = decimal.toString(2);
-    document.getElementById('hex-output').textContent = '0x' + decimal.toString(16).toUpperCase();
+    if (decimal < 0) {
+        let binVal = (decimal >>> 0).toString(2);
+        let hexVal = (decimal >>> 0).toString(16).toUpperCase();
+        binOutput.textContent = binVal;
+        hexOutput.textContent = '0x' + hexVal;
+    } else {
+        binOutput.textContent = decimal.toString(2);
+        hexOutput.textContent = '0x' + decimal.toString(16).toUpperCase();
+    }
 }
+
+
+function openUnitConverter() {
+    unitConverterOverlay.style.display = 'flex';
+    const result = parseFloat(currentInput);
+    if (!isNaN(result)) {
+        inputValue.value = result;
+    } else {
+        inputValue.value = 1;
+    }
+    convertUnits();
+    historyPanel.classList.remove('open');
+}
+
+function closeUnitConverter() {
+    unitConverterOverlay.style.display = 'none';
+    currentInput = outputMeters.textContent.replace(/[^\d\.]/g, ''); 
+    display.value = currentInput;
+    updateButtonHighlights();
+}
+
+function convertUnits() {
+    const inputUnitType = inputUnit.value;
+    const value = parseFloat(inputValue.value);
+
+    if (isNaN(value)) {
+        outputMeters.textContent = 'Invalid';
+        outputFeet.textContent = 'Invalid';
+        outputKilometers.textContent = 'Invalid';
+        outputMiles.textContent = 'Invalid';
+        return;
+    }
+    
+    let meters = 0;
+
+    switch(inputUnitType) {
+        case 'meters':
+            meters = value;
+            break;
+        case 'feet':
+            meters = value * 0.3048;
+            break;
+        case 'kilometers':
+            meters = value * 1000;
+            break;
+        case 'miles':
+            meters = value * 1609.34;
+            break;
+    }
+
+    const results = {
+        meters: meters,
+        feet: meters / 0.3048,
+        kilometers: meters / 1000,
+        miles: meters / 1609.34
+    };
+    
+    const format = (num) => parseFloat(num).toFixed(6).replace(/\.?0+$/, '');
+
+    outputMeters.textContent = format(results.meters);
+    outputFeet.textContent = format(results.feet);
+    outputKilometers.textContent = format(results.kilometers);
+    outputMiles.textContent = format(results.miles);
+}
+
+// NEW AI SECURITY FUNCTION
+function openAISecurityAssistant() {
+    historyPanel.classList.remove('open');
+    alert("AI Security Assistant: This feature would typically open a new chat window or modal. You can integrate an external AI service (like a custom chat bot or API call) here to analyze security code snippets, generate test vectors, or explain vulnerabilities related to the Calculator's features. For now, it's a placeholder!");
+}
+
 
 function generateShareLink() {
     const encodedInput = encodeURIComponent(currentInput);
@@ -374,44 +514,3 @@ function loadStateFromURL() {
         window.history.pushState({}, document.title, window.location.pathname);
     }
 }
-
-function openUnitConverter() {
-    alert('Unit Converter: Feature coming soon! STAY TUNED');
-    historyPanel.classList.remove('open');
-}
-
-document.addEventListener('keydown', function(event) {
-    if(document.getElementById('programmer-overlay').style.display === 'flex') {
-        return; 
-    }
-    
-    const key = event.key;
-    const shift = event.shiftKey;
-
-    if (/[0-9\.\(\)]/.test(key)) {
-        appendToDisplay(key);
-    } else if (key === '+' || key === '-') {
-        appendToDisplay(key);
-    } else if (key === '*') {
-        appendToDisplay('×');
-    } else if (key === '/') {
-        appendToDisplay('/');
-        event.preventDefault(); 
-    } else if (key === 'Enter' || key === '=') {
-        calculate();
-        event.preventDefault(); 
-    } else if (key === 'Backspace') {
-        deleteLast();
-    } else if (key === 'Escape') {
-        closeProgrammerMode(); 
-        if(document.getElementById('programmer-overlay').style.display !== 'flex') {
-             clearDisplay();
-        }
-    } else if (!shift && key === '!') {
-        calculateAdvanced('fact');
-    } else if (!shift && key === '^') {
-        appendToDisplay('**'); 
-    } else if (!shift && key === '%') {
-        calculateAdvanced('percent');
-    }
-});
