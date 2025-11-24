@@ -4,7 +4,6 @@ body {
   background-position: center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -343,8 +342,8 @@ input:checked + .slider:before {
 }
 
 body.light-theme {
-    background-image: none !important; /* Remove the image in light mode */
-    background-color: #f7f7f7 !important; /* Set a clean light background color */
+    background-image: none !important; 
+    background-color: #f7f7f7 !important; 
     background-blend-mode: saturation;
 }
 
@@ -451,6 +450,38 @@ body.light-theme .util-btn:hover {
     color: #fad609;
     word-break: break-all;
 }
+.converter-input-group {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+.converter-input-group label {
+    flex-basis: 30%;
+    font-size: 1.1rem;
+}
+#input-value, #input-unit {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #555;
+    font-size: 1rem;
+    color: white;
+    background-color: #333;
+}
+#input-value {
+    flex-basis: 30%;
+    text-align: right;
+}
+#input-unit {
+    flex-basis: 35%;
+}
+.unit-result {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #fad609;
+    margin-left: 10px;
+}
+
 .overlay-content button {
     margin-top: 20px;
     padding: 10px 20px;
