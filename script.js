@@ -469,9 +469,8 @@ function sendAIQuery() {
     const typingIndicator = appendAIMessage("Thinking...", 'received', true);
     
     
-    const API_URL = window.location.hostname === 'localhost' 
-        ? 'http://localhost:3000/api/chat' 
-        : 'https://your-deployed-backend.com/api/chat';
+   const API_URL = `${import.meta.env.VITE_API_URL}/api/chat`;
+console.log('Using API_URL:', API_URL);
     
     fetch(API_URL, { 
         method: 'POST',
@@ -486,7 +485,7 @@ function sendAIQuery() {
     })
     .then(data => {
         typingIndicator.remove();
-        // Handle streaming response if using streaming
+        
         appendAIMessage(data.reply || data.content, 'received');
     })
     .catch(error => {
