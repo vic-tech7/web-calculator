@@ -466,83 +466,55 @@ function sendAIQuery() {
     appendAIMessage(userMessage, 'sent');
     aiUserInput.value = '';
 
-    const typingIndicator = appendAIMessage("...", 'received', true);
-    setTimeout(() => {
-        typingIndicator.remove(); 
-        const aiResponse = getAIGeneralResponse(userMessage);
-        appendAIMessage(aiResponse, 'received');
-    }, 1000);
+    const typingIndicator = appendAIMessage("Thinking...", 'received', true);
+    
+    
+    const API_URL = window.location.hostname === 'localhost' 
+        ? 'http://localhost:3000/api/chat' 
+        : 'https://your-deployed-backend.com/api/chat';
+    
+    fetch(API_URL, { 
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMessage })
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Server error or API key issue.');
+        }
+        return response.json();
+    })
+    .then(data => {
+        typingIndicator.remove();
+        // Handle streaming response if using streaming
+        appendAIMessage(data.reply || data.content, 'received');
+    })
+    .catch(error => {
+        console.error("Fetch Error:", error);
+        typingIndicator.remove();
+        appendAIMessage("Sorry, I'm having trouble connecting. Please try again.", 'received');
+    });
 }
 
-function appendAIMessage(text, sender, isTyping = false) {
+function appendAIMessage(text, type, isTyping = false) {
     const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${sender}`;
-    if (isTyping) messageDiv.id = 'typing-indicator';
-    messageDiv.innerHTML = `<strong>${sender === 'sent' ? 'You' : 'VEC AI'}:</strong> ${text}`;
+    messageDiv.className = `message ${type}`;
+    
+    const strong = document.createElement('strong');
+    strong.textContent = type === 'sent' ? 'You:' : 'VEC AI:';
+    
+    const content = document.createElement('span');
+    content.textContent = isTyping ? text : text;
+    
+    messageDiv.appendChild(strong);
+    messageDiv.appendChild(document.createTextNode(' '));
+    messageDiv.appendChild(content);
+    
     aiMessagesContainer.appendChild(messageDiv);
     aiMessagesContainer.scrollTop = aiMessagesContainer.scrollHeight;
+    
     return messageDiv;
 }
-
-function getAIGeneralResponse(userInput) {
-   const lowerInput = userInput.toLowerCase().trim();
-   if (/^(hello|hi|hey|greetings)/i.test(lowerInput)) {
-       return "Hi there! I’m your multi-functional vec ai assistant. CREATED BY VICTOR —just tell me what you need!";
-   }
-
-   if (/\bwhat is \d+(?:\s*[\+\-\*\/]\s*\d+)+\??/.test(lowerInput)) {
-       try {
-           const matches = userInput.match(/\d+(?:\s*[\+\-\*\/]\s*\d+)+/);
-           const expr = matches?.[0];
-           if (expr) {
-               const result = eval(expr);
-               return `That evaluates to ${result}. 😊`;
-           }
-       } catch (err) {}
-   }
-
-
-   if (lowerInput.includes("capital of") || lowerInput.includes("population of")) {
-       return "I’m happy to help find country facts! Try asking things like ‘What’s the population of Japan?’ or ‘Where is Argentina’s capital?’";
-   }
-
-   
-   if (
-       lowerInput.includes("gravity") ||
-       lowerInput.includes("dna") ||
-       lowerInput.includes("phoenix") ||
-       lowerInput.includes("element")
-   ) {
-       if (lowerInput.includes("dna")) {
-           return "DNA stands for deoxyribonucleic acid. It contains the instructions used in development and functioning of all living organisms.";
-       }
-       if (lowerInput.includes("gravity")) {
-           return "Gravity is the force that attracts two bodies toward each other. On Earth, gravity gives weight to physical objects and causes tides due to the Moon's attraction.";
-       }
-       if (lowerInput.includes("phoenix")) {
-           return "A phoenix is a bird from mythology that dies in flames and rises renewed from ashes, symbolizing rebirth. Used metaphorically often today.";
-       }
-       if (lowerInput.includes("element")) {
-           return "An element is a substance made entirely of one kind of atom. Examples include oxygen, carbon, gold, iron, and silicon.";
-       }
-   }
-
-   if (lowerInput.includes("python") && lowerInput.includes("loop")) {
-       return "Loops in Python allow code blocks to repeat multiple times based on a condition. You can use:\n\n1. `for` loop (for definite iterations)\n2. `while` loop (for indefinite conditions)";
-   }
-
-   if (
-       lowerInput.includes("penetrat") ||
-       lowerInput.includes("hack") ||
-       lowerInput.includes("security") ||
-       lowerInput.includes("exploit")
-   ) {
-       return "Gotcha! Want details on payloads, scanners, reverse shells, privilege escalation, XSS, CSRF, or SQLMap syntax? Let me know which aspect!";
-   }
-
-   return "I’ve learned quite a bit recently — from science and philosophy to programming tricks and history trivia. Feel free to ask almost anything!";
-}
-
 
 aiUserInput.addEventListener('keydown', function(e) {
     if (e.key === 'Enter' && !e.shiftKey) {
