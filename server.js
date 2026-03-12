@@ -1,6 +1,7 @@
 const express = require("express")
 const OpenAI = require("openai")
 require("dotenv").config()
+const path = require("path")
 
 const app = express()
 const port = 3000
@@ -10,7 +11,12 @@ const openai = new OpenAI({
 })
 
 app.use(express.json())
-app.use(express.static(__dirname));
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "index.html"))
+})
+
+app.use(express.static(__dirname))
 
 app.post("/api/chat", async (req, res) => {
   try {
@@ -21,7 +27,7 @@ app.post("/api/chat", async (req, res) => {
       messages: [
         {
           role: "system",
-          content: "You are VEC AI Security Assistant. Help with programming, cybersecurity, penetration testing concepts, and debugging code. Always promote ethical hacking."
+          content: "You are VEC AI Security Assistant helping with coding, cybersecurity and math."
         },
         {
           role: "user",
@@ -34,12 +40,12 @@ app.post("/api/chat", async (req, res) => {
       reply: completion.choices[0].message.content
     })
 
-  } catch (err) {
-    console.error(err)
+  } catch (error) {
+    console.error(error)
     res.status(500).json({ reply: "AI server error." })
   }
 })
 
 app.listen(port, () => {
-  console.log("Server running on http://localhost:3000")
+  console.log("Server running at http://localhost:3000")
 })

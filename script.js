@@ -1,3 +1,4 @@
+document.addEventListener("DOMContentLoaded", function() {
 let display = document.getElementById('display');
 let currentInput = '';
 const clickSound = document.getElementById('click-sound');
@@ -554,4 +555,4 @@ function loadStateFromURL() {
     if (input || memory || mode) {
         window.history.pushState({}, document.title, window.location.pathname);
     }
-}
+}})
