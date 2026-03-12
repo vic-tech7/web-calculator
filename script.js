@@ -247,10 +247,12 @@ function updateButtonHighlights() {
 }
 
 function playClickSound() {
-    if(clickSound) {
-        clickSound.currentTime = 0;
-        clickSound.play();
-    }
+  try {
+    const audio = new Audio('click.mp3');
+    audio.play().catch(() => console.log('Audio playback failed'));
+  } catch (error) {
+    console.log('Audio error handled');
+  }
 }
 
 function switchTheme(e) {
@@ -451,9 +453,10 @@ const aiUserInput = document.getElementById('ai-user-input');
 
 function openAISecurityAssistant() {
     aiChatOverlay.style.display = 'flex';
-    historyPanel.classList.remove('open');
+    historyPanel.classList.remove('open'); // <- This line
     setTimeout(() => aiUserInput.focus(), 100);
 }
+
 
 function closeAIChat() {
     aiChatOverlay.style.display = 'none';
@@ -485,7 +488,7 @@ console.log('Using API_URL:', API_URL);
     })
     .then(data => {
         typingIndicator.remove();
-        
+
         appendAIMessage(data.reply || data.content, 'received');
     })
     .catch(error => {
