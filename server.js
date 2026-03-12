@@ -1,38 +1,45 @@
-const express = require('express');
-const OpenAI = require('openai');
-require('dotenv').config();
+const express = require("express")
+const OpenAI = require("openai")
+require("dotenv").config()
 
-const app = express();
-const port = 3000;
+const app = express()
+const port = 3000
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
-});
+})
 
-app.use(express.json());
-app.use(express.static('public')); 
+app.use(express.json())
+app.use(express.static("."))
 
-app.post('/api/chat', async (req, res) => {
+app.post("/api/chat", async (req, res) => {
   try {
-    const { message } = req.body;
-    
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4o-mini',
-      messages: [
-        { role: 'system', content: 'You are VEC AI Security Assistant, a helpful penetration testing assistant. Provide clear, educational responses about security concepts, exploits, tools, and coding. Always emphasize ethical hacking and responsible disclosure.' },
-        { role: 'user', content: message }
-      ],
-      max_tokens: 500
-    });
+    const { message } = req.body
 
-    res.json({ reply: completion.choices[0].message.content });
-  } catch (error) {
-    console.error('OpenAI Error:', error);
-    res.status(500).json({ error: 'Failed to get response from AI' });
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content: "You are VEC AI Security Assistant. Help with programming, cybersecurity, penetration testing concepts, and debugging code. Always promote ethical hacking."
+        },
+        {
+          role: "user",
+          content: message
+        }
+      ]
+    })
+
+    res.json({
+      reply: completion.choices[0].message.content
+    })
+
+  } catch (err) {
+    console.error(err)
+    res.status(500).json({ reply: "AI server error." })
   }
-});
+})
 
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
-});
-
+  console.log("Server running on http://localhost:3000")
+})

@@ -470,31 +470,22 @@ function sendAIQuery() {
     aiUserInput.value = '';
 
     const typingIndicator = appendAIMessage("Thinking...", 'received', true);
-    
-    
-   const API_URL = `${import.meta.env.VITE_API_URL}/api/chat`;
-console.log('Using API_URL:', API_URL);
-    
-    fetch(API_URL, { 
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+
+    fetch("/api/chat", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
         body: JSON.stringify({ message: userMessage })
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Server error or API key issue.');
-        }
-        return response.json();
-    })
+    .then(res => res.json())
     .then(data => {
         typingIndicator.remove();
-
-        appendAIMessage(data.reply || data.content, 'received');
+        appendAIMessage(data.reply, "received");
     })
-    .catch(error => {
-        console.error("Fetch Error:", error);
+    .catch(() => {
         typingIndicator.remove();
-        appendAIMessage("Sorry, I'm having trouble connecting. Please try again.", 'received');
+        appendAIMessage("Connection error with AI server.", "received");
     });
 }
 
