@@ -1,14 +1,17 @@
 import OpenAI from "openai";
 
 export default async function handler(req, res) {
-
   try {
 
     if (req.method !== "POST") {
       return res.status(405).json({ error: "Method not allowed" });
     }
 
-    const { message } = req.body;
+    if (!process.env.OPENAI_API_KEY) {
+      return res.status(500).json({ error: "Missing OPENAI_API_KEY" });
+    }
+
+    const { message } = req.body || {};
 
     if (!message) {
       return res.status(400).json({ error: "No message provided" });
@@ -18,12 +21,12 @@ export default async function handler(req, res) {
       apiKey: process.env.OPENAI_API_KEY
     });
 
-    const completion = await openai.chat.completions.create({
+    const response = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
-          content: "You are VEC AI assistant helping with math, programming, and cybersecurity."
+          content: "You are VEC AI, a helpful math and cybersecurity assistant."
         },
         {
           role: "user",
@@ -33,17 +36,17 @@ export default async function handler(req, res) {
     });
 
     return res.status(200).json({
-      reply: completion.choices[0].message.content
+      reply: response.choices[0].message.content
     });
 
   } catch (error) {
 
-    console.error("AI Error:", error);
+    console.error("AI ERROR:", error);
 
     return res.status(500).json({
-      reply: "AI server crashed."
+      error: "Server crashed",
+      details: error.message
     });
 
   }
-
 }
