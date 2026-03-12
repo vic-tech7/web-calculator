@@ -10,7 +10,7 @@ const openai = new OpenAI({
 })
 
 app.use(express.json())
-app.use(express.static("."))
+app.use(express.static(__dirname));
 
 app.post("/api/chat", async (req, res) => {
   try {
