@@ -26,7 +26,6 @@ function calculate() {
       .replace(/\^/g, "**");
 
     let result = eval(expression);
-
     result = parseFloat(result.toFixed(10));
 
     currentInput = result.toString();
@@ -71,197 +70,184 @@ function factorial(n) {
 
   let result = 1;
 
-  for (let i = 1; i <= n; i++) {
-    result *= i;
-  }
+  for (let i = 1; i <= n; i++) result *= i;
 
   return result;
 
 }
 
-function changeBackground(){
+function changeBackground() {
 
-const images=[
-"https://source.unsplash.com/1600x900/?abstract",
-"https://source.unsplash.com/1600x900/?space",
-"https://source.unsplash.com/1600x900/?technology",
-"https://source.unsplash.com/1600x900/?cyberpunk",
-"https://source.unsplash.com/1600x900/?geometry"
-]
+  const images = [
+    "https://source.unsplash.com/1600x900/?abstract",
+    "https://source.unsplash.com/1600x900/?space",
+    "https://source.unsplash.com/1600x900/?technology",
+    "https://source.unsplash.com/1600x900/?cyberpunk",
+    "https://source.unsplash.com/1600x900/?geometry"
+  ];
 
-const img=images[Math.floor(Math.random()*images.length)]
+  const img = images[Math.floor(Math.random() * images.length)];
 
-document.body.style.backgroundImage=`url(${img})`
-document.body.style.backgroundSize="cover"
-
-}
-
-function generateShareLink(){
-
-const text = encodeURIComponent(currentInput)
-
-const url = window.location.origin + "?calc=" + text
-
-navigator.clipboard.writeText(url)
-
-alert("Share link copied!")
+  document.body.style.backgroundImage = `url(${img})`;
+  document.body.style.backgroundSize = "cover";
 
 }
 
-window.onload = function(){
+function generateShareLink() {
 
-const params = new URLSearchParams(window.location.search)
+  const text = encodeURIComponent(currentInput);
 
-if(params.has("calc")){
-currentInput=params.get("calc")
-display.value=currentInput
-}
+  const url = window.location.origin + "?calc=" + text;
 
-}
+  navigator.clipboard.writeText(url);
 
-function openProgrammerMode(){
-
-const num = parseInt(currentInput)
-
-if(isNaN(num)) return alert("Enter a number first")
-
-document.getElementById("programmer-overlay").style.display="flex"
-
-convertBases()
+  alert("Share link copied!");
 
 }
 
-function closeProgrammerMode(){
+window.onload = function () {
 
-document.getElementById("programmer-overlay").style.display="none"
+  const params = new URLSearchParams(window.location.search);
 
-}
+  if (params.has("calc")) {
+    currentInput = params.get("calc");
+    display.value = currentInput;
+  }
 
-function convertBases(){
+};
 
-const decInput = document.getElementById("dec-input")
+function openProgrammerMode() {
 
-const binOutput = document.getElementById("bin-output")
+  const num = parseInt(currentInput);
 
-const hexOutput = document.getElementById("hex-output")
+  if (isNaN(num)) return alert("Enter a number first");
 
-const value = parseInt(decInput.value)
+  document.getElementById("programmer-overlay").style.display = "flex";
 
-if(!isNaN(value)){
-
-binOutput.textContent = value.toString(2)
-
-hexOutput.textContent = "0x"+value.toString(16).toUpperCase()
-
-}else{
-
-binOutput.textContent="0"
-
-hexOutput.textContent="0x0"
+  convertBases();
 
 }
 
-}
+function closeProgrammerMode() {
 
-function openUnitConverter(){
-
-document.getElementById("unit-converter-overlay").style.display="flex"
+  document.getElementById("programmer-overlay").style.display = "none";
 
 }
 
-function closeUnitConverter(){
+function convertBases() {
 
-document.getElementById("unit-converter-overlay").style.display="none"
+  const decInput = document.getElementById("dec-input");
+  const binOutput = document.getElementById("bin-output");
+  const hexOutput = document.getElementById("hex-output");
 
-}
+  const value = parseInt(decInput.value);
 
-function openAISecurityAssistant(){
+  if (!isNaN(value)) {
 
-document.getElementById("ai-chat-overlay").style.display="flex"
+    binOutput.textContent = value.toString(2);
+    hexOutput.textContent = "0x" + value.toString(16).toUpperCase();
 
-}
+  } else {
 
-function closeAIChat(){
+    binOutput.textContent = "0";
+    hexOutput.textContent = "0x0";
 
-document.getElementById("ai-chat-overlay").style.display="none"
-
-}
-
-function sendAIQuery(){
-
-const input=document.getElementById("ai-user-input")
-
-const messages=document.getElementById("ai-chat-messages")
-
-let msg=input.value.trim()
-
-if(!msg) return
-
-let user=document.createElement("div")
-
-user.innerHTML="<b>You:</b> "+msg
-
-messages.appendChild(user)
-
-input.value=""
-
-fetch("/api/chat",{
-
-method:"POST",
-
-headers:{ "Content-Type":"application/json" },
-
-body:JSON.stringify({message:msg})
-
-})
-
-.then(r=>r.json())
-
-.then(data=>{
-
-let ai=document.createElement("div")
-
-ai.innerHTML="<b>VEC AI:</b> "+data.reply
-
-messages.appendChild(ai)
-
-messages.scrollTop=messages.scrollHeight
-
-})
-
-.catch(()=>{
-
-let err=document.createElement("div")
-
-err.innerHTML="<b>VEC AI:</b> Connection error."
-
-messages.appendChild(err)
-
-})
+  }
 
 }
 
-function toggleHistoryPanel(){
+function openUnitConverter() {
 
-const panel=document.getElementById("history-panel")
-
-panel.classList.toggle("open")
+  document.getElementById("unit-converter-overlay").style.display = "flex";
 
 }
 
-window.appendToDisplay=appendToDisplay
-window.clearDisplay=clearDisplay
-window.deleteLast=deleteLast
-window.calculate=calculate
-window.calculateAdvanced=calculateAdvanced
-window.changeBackground=changeBackground
-window.generateShareLink=generateShareLink
-window.openProgrammerMode=openProgrammerMode
-window.closeProgrammerMode=closeProgrammerMode
-window.openUnitConverter=openUnitConverter
-window.closeUnitConverter=closeUnitConverter
-window.openAISecurityAssistant=openAISecurityAssistant
-window.closeAIChat=closeAIChat
-window.sendAIQuery=sendAIQuery
-window.toggleHistoryPanel=toggleHistoryPanel
-window.convertBases=convertBases
+function closeUnitConverter() {
+
+  document.getElementById("unit-converter-overlay").style.display = "none";
+
+}
+
+function openAISecurityAssistant() {
+
+  document.getElementById("ai-chat-overlay").style.display = "flex";
+
+}
+
+function closeAIChat() {
+
+  document.getElementById("ai-chat-overlay").style.display = "none";
+
+}
+
+function sendAIQuery() {
+
+  const input = document.getElementById("ai-user-input");
+  const messages = document.getElementById("ai-chat-messages");
+
+  let msg = input.value.trim();
+
+  if (!msg) return;
+
+  let user = document.createElement("div");
+  user.innerHTML = "<b>You:</b> " + msg;
+
+  messages.appendChild(user);
+
+  input.value = "";
+
+  fetch("/api/chat", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      message: msg
+    })
+  })
+    .then(r => r.json())
+    .then(data => {
+
+      let ai = document.createElement("div");
+      ai.innerHTML = "<b>VEC AI:</b> " + data.reply;
+
+      messages.appendChild(ai);
+
+      messages.scrollTop = messages.scrollHeight;
+
+    })
+    .catch(() => {
+
+      let err = document.createElement("div");
+      err.innerHTML = "<b>VEC AI:</b> Connection error.";
+
+      messages.appendChild(err);
+
+    });
+
+}
+
+function toggleHistoryPanel() {
+
+  const panel = document.getElementById("history-panel");
+
+  panel.classList.toggle("open");
+
+}
+
+window.appendToDisplay = appendToDisplay;
+window.clearDisplay = clearDisplay;
+window.deleteLast = deleteLast;
+window.calculate = calculate;
+window.calculateAdvanced = calculateAdvanced;
+window.changeBackground = changeBackground;
+window.generateShareLink = generateShareLink;
+window.openProgrammerMode = openProgrammerMode;
+window.closeProgrammerMode = closeProgrammerMode;
+window.openUnitConverter = openUnitConverter;
+window.closeUnitConverter = closeUnitConverter;
+window.openAISecurityAssistant = openAISecurityAssistant;
+window.closeAIChat = closeAIChat;
+window.sendAIQuery = sendAIQuery;
+window.toggleHistoryPanel = toggleHistoryPanel;
+window.convertBases = convertBases;
