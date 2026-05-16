@@ -241,6 +241,7 @@ button.active-key {
     padding: 5px 10px;
     font-size: 0.9rem;
     border-radius: 5px;
+    margin-left: 5px;
 }
 
 #history-list {
@@ -362,12 +363,26 @@ button.active-key {
     align-self: flex-end;
 }
 
-/* ADDED */
+#ai-chat-overlay .overlay-content {
+    width: 500px;
+    max-width: 95%;
+    background: #121212;
+    border: 2px solid #00bcd4;
+}
+
 #ai-user-input {
     width: 100%;
-    min-height: 100px;
-    padding: 10px;
+    min-height: 90px;
+    border: none;
+    outline: none;
+    padding: 12px;
     border-radius: 10px;
+    background: #222;
+    color: white;
+    resize: none;
+}
+
+#ai-chat-overlay button {
     margin-top: 10px;
-    font-size: 1rem;
+    width: 100%;
 }

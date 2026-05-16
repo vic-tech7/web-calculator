@@ -155,10 +155,7 @@ function sendAIQuery() {
   let msg = input.value.trim();
   if (!msg) return;
 
-  let user = document.createElement("div");
-  user.innerHTML = "<b>You:</b> " + msg;
-  messages.appendChild(user);
-
+  messages.innerHTML += `<div><b>You:</b> ${msg}</div>`;
   input.value = "";
 
   fetch("/api/chat", {
@@ -168,17 +165,20 @@ function sendAIQuery() {
     },
     body: JSON.stringify({ message: msg })
   })
-    .then(r => r.json())
-    .then(data => {
-      let ai = document.createElement("div");
-      ai.innerHTML = "<b>VEC AI:</b> " + data.reply;
-      messages.appendChild(ai);
+    .then(async res => {
+      const data = await res.json();
+
+      messages.innerHTML += `
+        <div><b>VEC AI:</b> ${data.reply || data.error || "No response"}</div>
+      `;
+
       messages.scrollTop = messages.scrollHeight;
     })
-    .catch(() => {
-      let err = document.createElement("div");
-      err.innerHTML = "<b>VEC AI:</b> Connection error.";
-      messages.appendChild(err);
+    .catch(error => {
+      messages.innerHTML += `
+        <div><b>VEC AI:</b> Connection error. Check API deployment.</div>
+      `;
+      console.error(error);
     });
 }
 
