@@ -176,7 +176,7 @@ function sendAIQuery() {
     })
     .catch(error => {
       messages.innerHTML += `
-        <div><b>VEC AI:</b> Connection error. Check API deploymented.</div>
+        <div><b>VEC AI:</b> Connection error. Check API deployment.</div>
       `;
       console.error(error);
     });
