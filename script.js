@@ -60,82 +60,63 @@ function calculateAdvanced(type) {
   if (type === "percent") currentInput = value / 100;
 
   display.value = currentInput;
-
 }
 
 function factorial(n) {
-
   if (n < 0) return NaN;
   if (n === 0) return 1;
 
   let result = 1;
-
   for (let i = 1; i <= n; i++) result *= i;
-
   return result;
-
 }
 
+/* FIXED WALLPAPER */
 function changeBackground() {
 
   const images = [
-    "https://source.unsplash.com/1600x900/?abstract",
-    "https://source.unsplash.com/1600x900/?space",
-    "https://source.unsplash.com/1600x900/?technology",
-    "https://source.unsplash.com/1600x900/?cyberpunk",
-    "https://source.unsplash.com/1600x900/?geometry"
+    "https://images.unsplash.com/photo-1518770660439-4636190af475",
+    "https://images.unsplash.com/photo-1504384308090-c894fdcc538d",
+    "https://images.unsplash.com/photo-1516321318423-f06f85e504b3",
+    "https://images.unsplash.com/photo-1498050108023-c5249f4df085"
   ];
 
   const img = images[Math.floor(Math.random() * images.length)];
 
-  document.body.style.backgroundImage = `url(${img})`;
+  document.body.style.backgroundImage = `url(${img}?auto=format&fit=crop&w=1600&q=80)`;
   document.body.style.backgroundSize = "cover";
-
 }
 
 function generateShareLink() {
-
   const text = encodeURIComponent(currentInput);
-
   const url = window.location.origin + "?calc=" + text;
-
   navigator.clipboard.writeText(url);
-
   alert("Share link copied!");
-
 }
 
 window.onload = function () {
-
   const params = new URLSearchParams(window.location.search);
 
   if (params.has("calc")) {
     currentInput = params.get("calc");
     display.value = currentInput;
   }
-
 };
 
 function openProgrammerMode() {
-
   const num = parseInt(currentInput);
 
   if (isNaN(num)) return alert("Enter a number first");
 
   document.getElementById("programmer-overlay").style.display = "flex";
-
   convertBases();
-
 }
 
 function closeProgrammerMode() {
-
   document.getElementById("programmer-overlay").style.display = "none";
-
 }
 
 function convertBases() {
-
   const decInput = document.getElementById("dec-input");
   const binOutput = document.getElementById("bin-output");
   const hexOutput = document.getElementById("hex-output");
@@ -143,55 +124,39 @@ function convertBases() {
   const value = parseInt(decInput.value);
 
   if (!isNaN(value)) {
-
     binOutput.textContent = value.toString(2);
     hexOutput.textContent = "0x" + value.toString(16).toUpperCase();
-
   } else {
-
     binOutput.textContent = "0";
     hexOutput.textContent = "0x0";
-
   }
-
 }
 
 function openUnitConverter() {
-
   document.getElementById("unit-converter-overlay").style.display = "flex";
-
 }
 
 function closeUnitConverter() {
-
   document.getElementById("unit-converter-overlay").style.display = "none";
-
 }
 
 function openAISecurityAssistant() {
-
   document.getElementById("ai-chat-overlay").style.display = "flex";
-
 }
 
 function closeAIChat() {
-
   document.getElementById("ai-chat-overlay").style.display = "none";
-
 }
 
 function sendAIQuery() {
-
   const input = document.getElementById("ai-user-input");
   const messages = document.getElementById("ai-chat-messages");
 
   let msg = input.value.trim();
-
   if (!msg) return;
 
   let user = document.createElement("div");
   user.innerHTML = "<b>You:</b> " + msg;
-
   messages.appendChild(user);
 
   input.value = "";
@@ -201,38 +166,25 @@ function sendAIQuery() {
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({
-      message: msg
-    })
+    body: JSON.stringify({ message: msg })
   })
     .then(r => r.json())
     .then(data => {
-
       let ai = document.createElement("div");
       ai.innerHTML = "<b>VEC AI:</b> " + data.reply;
-
       messages.appendChild(ai);
-
       messages.scrollTop = messages.scrollHeight;
-
     })
     .catch(() => {
-
       let err = document.createElement("div");
       err.innerHTML = "<b>VEC AI:</b> Connection error.";
-
       messages.appendChild(err);
-
     });
-
 }
 
 function toggleHistoryPanel() {
-
   const panel = document.getElementById("history-panel");
-
   panel.classList.toggle("open");
-
 }
 
 window.appendToDisplay = appendToDisplay;

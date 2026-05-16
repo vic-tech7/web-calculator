@@ -7,7 +7,6 @@ export default async function handler(req, res) {
   }
 
   try {
-
     const openai = new OpenAI({
       apiKey: process.env.OPENAI_API_KEY
     });
@@ -17,8 +16,14 @@ export default async function handler(req, res) {
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
-        { role: "system", content: "You are VEC AI, a helpful math assistant." },
-        { role: "user", content: message }
+        {
+          role: "system",
+          content: "You are VEC AI, a helpful assistant like ChatGPT."
+        },
+        {
+          role: "user",
+          content: message
+        }
       ]
     });
 
@@ -31,9 +36,8 @@ export default async function handler(req, res) {
     console.error(error);
 
     res.status(500).json({
-      error: "AI server error"
+      reply: "AI server error. Check API key."
     });
 
   }
-
 }
