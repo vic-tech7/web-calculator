@@ -152,34 +152,56 @@ function sendAIQuery() {
   const input = document.getElementById("ai-user-input");
   const messages = document.getElementById("ai-chat-messages");
 
-  let msg = input.value.trim();
+  const msg = input.value.trim();
   if (!msg) return;
 
-  messages.innerHTML += `<div><b>You:</b> ${msg}</div>`;
+  messages.innerHTML += `
+    <div style="margin-bottom:10px;">
+      <b>You:</b> ${msg}
+    </div>
+  `;
+
   input.value = "";
 
-  fetch("/api/chat", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ message: msg })
-  })
-    .then(async res => {
-      const data = await res.json();
+  messages.innerHTML += `
+    <div id="loading-msg">
+      <b>VEC AI:</b> Thinking...
+    </div>
+  `;
 
-      messages.innerHTML += `
-        <div><b>VEC AI:</b> ${data.reply || data.error || "No response"}</div>
+  messages.scrollTop = messages.scrollHeight;
+
+  const apis = [
+    `https://text.pollinations.ai/${encodeURIComponent(msg)}`,
+    `https://text.pollinations.ai/prompt/${encodeURIComponent(msg)}`
+  ];
+
+  async function tryAPIs(index = 0) {
+    if (index >= apis.length) {
+      document.getElementById("loading-msg").innerHTML =
+        "<b>VEC AI:</b> All AI services failed.";
+      return;
+    }
+
+    try {
+      const response = await fetch(apis[index]);
+
+      if (!response.ok) throw new Error("API failed");
+
+      const reply = await response.text();
+
+      document.getElementById("loading-msg").innerHTML = `
+        <b>VEC AI:</b> ${reply}
       `;
 
       messages.scrollTop = messages.scrollHeight;
-    })
-    .catch(error => {
-      messages.innerHTML += `
-        <div><b>VEC AI:</b> Connection error. Check API deployment.</div>
-      `;
-      console.error(error);
-    });
+    } catch (error) {
+      console.log("API failed, trying next...");
+      tryAPIs(index + 1);
+    }
+  }
+
+  tryAPIs();
 }
 
 function toggleHistoryPanel() {
