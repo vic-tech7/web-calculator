@@ -86,7 +86,11 @@
 <!-- AI WINDOW -->
 <div id="ai-chat-overlay" class="ai-window">
     <div id="ai-box" class="ai-box">
-        <h2>VECTOR AI Assistant</h2>
+
+        <div id="drag-bar">
+            <span>VECTOR AI Assistant</span>
+            <button onclick="closeAIChat()" id="close-ai-btn">✖</button>
+        </div>
 
         <div id="ai-chat-messages"></div>
 
@@ -101,18 +105,27 @@
         <button onclick="insertPrompt('Write JavaScript code for ')">JS</button>
 
         <button onclick="clearAIChat()">Clear Chat</button>
-        <button onclick="closeAIChat()">Close</button>
+
     </div>
 </div>
-
 
 <!-- CONTACT -->
 <div id="contact-overlay" class="overlay">
     <div class="overlay-content">
         <h2>Contact CHAD FDEV</h2>
-        <p>WhatsApp: +34604157842</p>
-        <p>Email: vectordevtech@gmail.com</p>
-        <p>GitHub: github.com/vic-tech7</p>
+
+        <a href="https://wa.me/34604157842" target="_blank">
+            <button>WhatsApp</button>
+        </a>
+
+        <a href="mailto:vectordevtech@gmail.com">
+            <button>Email</button>
+        </a>
+
+        <a href="https://github.com/vic-tech7" target="_blank">
+            <button>GitHub</button>
+        </a>
+
         <button onclick="closeContactPage()">Close</button>
     </div>
 </div>

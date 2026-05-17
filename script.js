@@ -162,29 +162,36 @@ function closeAIChat() {
 }
 
 async function sendAIQuery() {
-  const input = document.getElementById("ai-user-input");
-  const messages = document.getElementById("ai-chat-messages");
+    const input = document.getElementById("ai-user-input");
+    const messages = document.getElementById("ai-chat-messages");
 
-  const prompt = input.value.trim();
-  if (!prompt) return;
+    const prompt = input.value.trim();
+    if (!prompt) return;
 
-  messages.innerHTML += `<div><b>You:</b> ${prompt}</div>`;
-  input.value = "";
+    messages.innerHTML += `
+        <div class="user-message">${prompt}</div>
+    `;
 
-  const loading = document.createElement("div");
-  loading.innerHTML = "<b>VEC AI:</b> Thinking...";
-  messages.appendChild(loading);
+    input.value = "";
 
-  try {
-    const response = await fetch(
-      `https://text.pollinations.ai/${encodeURIComponent(prompt)}`
-    );
+    const loading = document.createElement("div");
+    loading.className = "ai-message";
+    loading.innerHTML = "Thinking...";
+    messages.appendChild(loading);
 
-    const reply = await response.text();
-    loading.innerHTML = `<b>VEC AI:</b> ${reply}`;
-  } catch {
-    loading.innerHTML = `<b>VEC AI:</b> Connection error`;
-  }
+    try {
+        const response = await fetch(
+            `https://text.pollinations.ai/${encodeURIComponent(prompt)}`
+        );
+
+        const reply = await response.text();
+        loading.innerHTML = reply;
+
+    } catch {
+        loading.innerHTML = "Connection error";
+    }
+
+    messages.scrollTop = messages.scrollHeight;
 }
 
 /* ---------------- IMAGE GENERATION ---------------- */
@@ -303,4 +310,40 @@ function openAISecurityAssistant(){
 
 function closeAIChat(){
     document.getElementById("ai-chat-overlay").style.display="none";
+}
+
+dragElement(document.getElementById("ai-box"));
+
+function dragElement(elmnt) {
+    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+
+    document.getElementById("drag-bar").onmousedown = dragMouseDown;
+
+    function dragMouseDown(e) {
+        e.preventDefault();
+
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+
+        document.onmouseup = closeDragElement;
+        document.onmousemove = elementDrag;
+    }
+
+    function elementDrag(e) {
+        e.preventDefault();
+
+        pos1 = pos3 - e.clientX;
+        pos2 = pos4 - e.clientY;
+        pos3 = e.clientX;
+        pos4 = e.clientY;
+
+        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+        elmnt.style.position = "absolute";
+    }
+
+    function closeDragElement() {
+        document.onmouseup = null;
+        document.onmousemove = null;
+    }
 }
