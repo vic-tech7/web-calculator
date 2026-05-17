@@ -141,7 +141,14 @@
 
 <textarea id="ai-user-input"></textarea>
 
-<button onclick="sendAIQuery()">Send</button>
+<button onclick="sendAIQuery()">Send Message</button>
+<button onclick="generateImage()">Generate Image</button>
+<input type="file" id="image-upload">
+<button onclick="editImage()">Edit Image</button>
+<button onclick="insertPrompt('Write HTML code for ')">HTML</button>
+<button onclick="insertPrompt('Write CSS code for ')">CSS</button>
+<button onclick="insertPrompt('Write JavaScript code for ')">JS</button>
+<button onclick="clearAIChat()">Clear Chat</button>
 
 <button onclick="closeAIChat()">Close</button>
 

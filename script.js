@@ -152,7 +152,9 @@ function sendAIQuery() {
   const input = document.getElementById("ai-user-input");
   const messages = document.getElementById("ai-chat-messages");
 
-  const msg = input.value.trim();
+  const msg =
+  "You are VEC AI, an advanced assistant that helps with coding, math, science, images, and web development. User: " +
+  input.value.trim();
   if (!msg) return;
 
   messages.innerHTML += `
@@ -204,9 +206,57 @@ function sendAIQuery() {
   tryAPIs();
 }
 
+function clearAIChat() {
+  document.getElementById("ai-chat-messages").innerHTML = "";
+}
+
 function toggleHistoryPanel() {
   const panel = document.getElementById("history-panel");
   panel.classList.toggle("open");
+}
+
+function generateImage() {
+  const input = document.getElementById("ai-user-input");
+  const messages = document.getElementById("ai-chat-messages");
+
+  const prompt = input.value.trim();
+  if (!prompt) return;
+
+  const imageUrl =
+    "https://omegatech-api.dixonomega.tech/api/ai/nano-banana-pro?prompt=" +
+    encodeURIComponent(prompt);
+
+  messages.innerHTML += `
+    <div>
+      <b>Image:</b><br>
+      <img src="${imageUrl}" style="max-width:100%; border-radius:10px; margin-top:10px;">
+    </div>
+  `;
+
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function editImage() {
+  const input = document.getElementById("ai-user-input");
+  const messages = document.getElementById("ai-chat-messages");
+
+  const prompt = "edit image: " + input.value.trim();
+  if (!prompt) return;
+
+  const imageUrl =
+    "https://omegatech-api.dixonomega.tech/api/ai/nano-banana-pro?prompt=" +
+    encodeURIComponent(prompt);
+
+  messages.innerHTML += `
+    <div>
+      <b>Edited Image:</b><br>
+      <img src="${imageUrl}" style="max-width:100%; border-radius:10px;">
+    </div>
+  `;
+}
+
+function insertPrompt(text) {
+  document.getElementById("ai-user-input").value = text;
 }
 
 window.appendToDisplay = appendToDisplay;
