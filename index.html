@@ -9,158 +9,116 @@
 
 <body>
 
+<!-- HISTORY PANEL -->
 <div id="history-panel" class="history-panel">
+    <div class="history-header">
+        <h2>Calculation History</h2>
+        <button onclick="clearHistoryUI()">Clear</button>
+        <button onclick="toggleHistoryPanel()">Back</button>
+    </div>
 
-<div class="history-header">
-<h2>Calculation History</h2>
-<button onclick="clearHistoryUI()">Clear History</button>
-<button onclick="toggleHistoryPanel()">Back</button>
-</div>
+    <ul id="history-list"></ul>
 
-<ul id="history-list"></ul>
-
-<div class="utility-section">
-
-<h3>Utilities</h3>
-
-<button class="util-btn" onclick="openUnitConverter()">Unit Converter</button>
-
-<button class="util-btn" onclick="openProgrammerMode()">Programmer Mode</button>
-
-<button class="util-btn" onclick="openAISecurityAssistant()">AI Assistant</button>
-
-<button class="util-btn" onclick="generateShareLink()">Share Calculation</button>
-
-<button class="util-btn" onclick="changeBackground()">Dynamic Wallpaper</button>
-
-<button class="util-btn" onclick="openContactPage()">Contact CHAD FDEV</button>
-
-</div>
+    <div class="utility-section">
+        <h3>Utilities</h3>
+        <button class="util-btn" onclick="openUnitConverter()">Unit Converter</button>
+        <button class="util-btn" onclick="openProgrammerMode()">Programmer Mode</button>
+        <button class="util-btn" onclick="openAISecurityAssistant()">AI Assistant</button>
+        <button class="util-btn" onclick="changeBackground()">Dynamic Wallpaper</button>
+        <button class="util-btn" onclick="openContactPage()">Contact CHAD FDEV</button>
+    </div>
 </div>
 
 
 <div class="main-content">
 
-<button id="menu-button" onclick="toggleHistoryPanel()">☰</button>
-<button onclick="toggleHistoryPanel()">Back</button>
+    <button id="menu-button" onclick="toggleHistoryPanel()">☰</button>
 
-<header>
-<h1>VEC Scientific Web Calculator</h1>
-<p>How is my first calculator? Now SCIENTIFIC!</p>
-<p><em>Created by CHAD FDEV</em></p>
-</header>
+    <header>
+        <h1>VEC Scientific Web Calculator</h1>
+        <p>Now SCIENTIFIC + AI</p>
+        <p><em>Created by CHAD FDEV</em></p>
+    </header>
 
-<div class="calculator">
+    <div class="calculator">
+        <input type="text" id="display" disabled>
 
-<input type="text" id="display" disabled>
+        <div class="buttons">
+            <button onclick="clearDisplay()">AC</button>
+            <button onclick="deleteLast()">⌫</button>
+            <button onclick="appendToDisplay('/')">÷</button>
+            <button onclick="appendToDisplay('*')">×</button>
 
-<div class="buttons">
+            <button onclick="appendToDisplay('7')">7</button>
+            <button onclick="appendToDisplay('8')">8</button>
+            <button onclick="appendToDisplay('9')">9</button>
+            <button onclick="appendToDisplay('-')">-</button>
 
-<button onclick="clearDisplay()">AC</button>
-<button onclick="deleteLast()">⌫</button>
-<button onclick="appendToDisplay('/')">/</button>
-<button onclick="appendToDisplay('*')">×</button>
+            <button onclick="appendToDisplay('4')">4</button>
+            <button onclick="appendToDisplay('5')">5</button>
+            <button onclick="appendToDisplay('6')">6</button>
+            <button onclick="appendToDisplay('+')">+</button>
 
-<button onclick="appendToDisplay('7')">7</button>
-<button onclick="appendToDisplay('8')">8</button>
-<button onclick="appendToDisplay('9')">9</button>
-<button onclick="appendToDisplay('-')">-</button>
+            <button onclick="appendToDisplay('1')">1</button>
+            <button onclick="appendToDisplay('2')">2</button>
+            <button onclick="appendToDisplay('3')">3</button>
+            <button onclick="calculate()">=</button>
 
-<button onclick="appendToDisplay('4')">4</button>
-<button onclick="appendToDisplay('5')">5</button>
-<button onclick="appendToDisplay('6')">6</button>
-<button onclick="appendToDisplay('+')">+</button>
+            <button onclick="appendToDisplay('0')">0</button>
+            <button onclick="appendToDisplay('.')">.</button>
+            <button onclick="calculateAdvanced('sqrt')">√</button>
+            <button onclick="calculateAdvanced('sin')">sin</button>
 
-<button onclick="appendToDisplay('1')">1</button>
-<button onclick="appendToDisplay('2')">2</button>
-<button onclick="appendToDisplay('3')">3</button>
-<button onclick="calculate()">=</button>
+            <button onclick="calculateAdvanced('cos')">cos</button>
+            <button onclick="calculateAdvanced('tan')">tan</button>
+            <button onclick="calculateAdvanced('log')">log</button>
+            <button onclick="calculateAdvanced('square')">x²</button>
 
-<button onclick="appendToDisplay('0')">0</button>
-<button onclick="appendToDisplay('.')">.</button>
-<button onclick="calculateAdvanced('sqrt')">√</button>
-<button onclick="calculateAdvanced('sin')">sin</button>
-
-<button onclick="calculateAdvanced('cos')">cos</button>
-<button onclick="calculateAdvanced('tan')">tan</button>
-<button onclick="calculateAdvanced('log')">log</button>
-<button onclick="calculateAdvanced('square')">x²</button>
-
-<button onclick="calculateAdvanced('fact')">x!</button>
-<button onclick="calculateAdvanced('pi')">π</button>
-<button onclick="calculateAdvanced('e')">e</button>
-<button onclick="calculateAdvanced('percent')">%</button>
-
-</div>
-</div>
+            <button onclick="calculateAdvanced('fact')">x!</button>
+            <button onclick="calculateAdvanced('pi')">π</button>
+            <button onclick="calculateAdvanced('e')">e</button>
+            <button onclick="calculateAdvanced('percent')">%</button>
+        </div>
+    </div>
 </div>
 
 
-<div id="programmer-overlay" class="overlay">
-<div class="overlay-content">
+<!-- AI WINDOW -->
+<div id="ai-chat-overlay" class="ai-window">
+    <div id="ai-box" class="ai-box">
+        <h2>VECTOR AI Assistant</h2>
 
-<h2>Programmer Mode</h2>
+        <div id="ai-chat-messages"></div>
 
-<input type="number" id="dec-input" value="0" oninput="convertBases()">
+        <textarea id="ai-user-input" placeholder="Ask anything..."></textarea>
 
-<p>Binary: <span id="bin-output">0</span></p>
+        <button onclick="sendAIQuery()">Send</button>
+        <button onclick="generateImage()">Create Image</button>
+        <button onclick="editImage()">Edit Image</button>
 
-<p>Hexadecimal: <span id="hex-output">0x0</span></p>
+        <button onclick="insertPrompt('Write HTML code for ')">HTML</button>
+        <button onclick="insertPrompt('Write CSS code for ')">CSS</button>
+        <button onclick="insertPrompt('Write JavaScript code for ')">JS</button>
 
-<button onclick="closeProgrammerMode()">Close</button>
-
-</div>
-</div>
-
-
-<div id="unit-converter-overlay" class="overlay">
-<div class="overlay-content">
-
-<h2>Unit Converter</h2>
-
-<input type="number" id="input-value" value="1" oninput="convertUnits()">
-
-<p>Meters: <span id="output-meters"></span></p>
-
-<p>Feet: <span id="output-feet"></span></p>
-
-<p>Kilometers: <span id="output-kilometers"></span></p>
-
-<p>Miles: <span id="output-miles"></span></p>
-
-<button onclick="closeUnitConverter()">Close</button>
-
-</div>
+        <button onclick="clearAIChat()">Clear Chat</button>
+        <button onclick="closeAIChat()">Close</button>
+    </div>
 </div>
 
 
-<div id="ai-chat-overlay" class="overlay">
-<div class="overlay-content">
-
-<h2>VEC AI Assistant</h2>
-
-<div id="ai-chat-messages"></div>
-
-<textarea id="ai-user-input"></textarea>
-
-<button onclick="sendAIQuery()">Send Message</button>
-<button onclick="generateImage()">Generate Image</button>
-<input type="file" id="image-upload">
-<button onclick="editImage()">Edit Image</button>
-<button onclick="insertPrompt('Write HTML code for ')">HTML</button>
-<button onclick="insertPrompt('Write CSS code for ')">CSS</button>
-<button onclick="insertPrompt('Write JavaScript code for ')">JS</button>
-<button onclick="clearAIChat()">Clear Chat</button>
-
-<button onclick="closeAIChat()">Close</button>
-
+<!-- CONTACT -->
+<div id="contact-overlay" class="overlay">
+    <div class="overlay-content">
+        <h2>Contact CHAD FDEV</h2>
+        <p>WhatsApp: +34604157842</p>
+        <p>Email: vectordevtech@gmail.com</p>
+        <p>GitHub: github.com/vic-tech7</p>
+        <button onclick="closeContactPage()">Close</button>
+    </div>
 </div>
-</div>
+
+<footer>© CHAD FDEV</footer>
 
 <script src="script.js"></script>
-
 </body>
 </html>
-<footer style="position:fixed;bottom:10px;color:white;">
-© CHAD FDEV
-</footer>

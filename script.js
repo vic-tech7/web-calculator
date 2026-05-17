@@ -288,3 +288,19 @@ function dragElement(elmnt) {
     document.onmousemove = null;
   }
 }
+
+function openContactPage(){
+    document.getElementById("contact-overlay").style.display="flex";
+}
+
+function closeContactPage(){
+    document.getElementById("contact-overlay").style.display="none";
+}
+
+function openAISecurityAssistant(){
+    document.getElementById("ai-chat-overlay").style.display="block";
+}
+
+function closeAIChat(){
+    document.getElementById("ai-chat-overlay").style.display="none";
+}
