@@ -25,6 +25,7 @@
         <button class="util-btn" onclick="openProgrammerMode()">Programmer Mode</button>
         <button class="util-btn" onclick="openAISecurityAssistant()">AI Assistant</button>
         <button class="util-btn" onclick="changeBackground()">Dynamic Wallpaper</button>
+        <button class="util-btn" onclick="openCybertic()">CYBERTIC</button>
         <button class="util-btn" onclick="openContactPage()">Contact CHAD FDEV</button>
         <button class="util-btn" onclick="window.open('https://github.com/vic-tech7')">My GitHub</button>
         <button class="util-btn" onclick="window.location.reload()">Refresh App</button>
@@ -88,17 +89,17 @@
 
 
 <!-- AI WINDOW -->
-<div id="ai-chat-overlay" class="ai-window">
-    <div id="ai-box" class="ai-box">
+<div id="ai-chat-overlay">
+    <div id="ai-box">
 
         <div id="drag-bar">
-    <span>VEC AI Assistant</span>
+            <span>VECTOR AI Assistant</span>
 
-    <div>
-        <button id="drag-move-btn">MOVE</button>
-        <button onclick="closeAIChat()" id="close-ai-btn">✖</button>
-    </div>
-</div>
+            <div>
+                <button id="move-btn">MOVE</button>
+                <button onclick="closeAIChat()">✖</button>
+            </div>
+        </div>
         <div id="ai-chat-messages"></div>
 
         <textarea id="ai-user-input" placeholder="Ask anything..."></textarea>
@@ -134,6 +135,27 @@
         </a>
 
         <button onclick="closeContactPage()">Close</button>
+    </div>
+</div>
+
+<div id="cybertic-overlay" class="overlay">
+    <div class="overlay-content cyber-box">
+
+        <h1>CHAD FDEV TOOLS</h1>
+        <p><em>For education purposes only</em></p>
+
+        <textarea id="cyber-input" placeholder="Enter text here"></textarea>
+
+        <button onclick="generateHash()">SHA256 Hash</button>
+        <button onclick="encodeBase64()">Base64 Encode</button>
+        <button onclick="decodeBase64()">Base64 Decode</button>
+        <button onclick="generatePassword()">Password Generator</button>
+        <button onclick="urlEncode()">URL Encode</button>
+
+        <div id="cyber-output"></div>
+
+        <button onclick="closeCybertic()">Close</button>
+
     </div>
 </div>
 

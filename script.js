@@ -154,12 +154,36 @@ function closeUnitConverter() {
 /* ---------------- AI ---------------- */
 
 function openAISecurityAssistant() {
-  document.getElementById("ai-chat-overlay").style.display = "flex";
+  document.getElementById("ai-chat-overlay").classList.add("show");
 }
 
 function closeAIChat() {
-  document.getElementById("ai-chat-overlay").style.display = "none";
+  document.getElementById("ai-chat-overlay").classList.remove("show");
 }
+
+const aiBox = document.getElementById("ai-box");
+const dragBar = document.getElementById("drag-bar");
+
+let isDragging = false;
+let offsetX, offsetY;
+
+dragBar.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    offsetX = e.clientX - aiBox.offsetLeft;
+    offsetY = e.clientY - aiBox.offsetTop;
+});
+
+document.addEventListener("mousemove", (e) => {
+    if (!isDragging) return;
+
+    aiBox.style.position = "fixed";
+    aiBox.style.left = (e.clientX - offsetX) + "px";
+    aiBox.style.top = (e.clientY - offsetY) + "px";
+});
+
+document.addEventListener("mouseup", () => {
+    isDragging = false;
+});
 
 async function sendAIQuery() {
     const input = document.getElementById("ai-user-input");
@@ -257,87 +281,54 @@ https://github.com/vic-tech7`
   );
 }
 
-/* ---------------- DRAG AI WINDOW ---------------- */
-
-dragElement(document.querySelector("#ai-chat-overlay .overlay-content"));
-
-function dragElement(elmnt) {
-  let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
-
-  elmnt.onmousedown = dragMouseDown;
-
-  function dragMouseDown(e) {
-    e.preventDefault();
-
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-
-    document.onmouseup = closeDrag;
-    document.onmousemove = elementDrag;
-  }
-
-  function elementDrag(e) {
-    e.preventDefault();
-
-    pos1 = pos3 - e.clientX;
-    pos2 = pos4 - e.clientY;
-
-    pos3 = e.clientX;
-    pos4 = e.clientY;
-
-    elmnt.style.position = "absolute";
-    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-  }
-
-  function closeDrag() {
-    document.onmouseup = null;
-    document.onmousemove = null;
-  }
+function openCybertic() {
+    document.getElementById("cybertic-overlay").style.display = "flex";
 }
 
-function openContactPage(){
-    document.getElementById("contact-overlay").style.display="flex";
+function closeCybertic() {
+    document.getElementById("cybertic-overlay").style.display = "none";
 }
 
-function closeContactPage(){
-    document.getElementById("contact-overlay").style.display="none";
+function encodeBase64() {
+    let input = document.getElementById("cyber-input").value;
+    document.getElementById("cyber-output").innerText = btoa(input);
 }
 
-function openAISecurityAssistant() {
-  document.getElementById("ai-chat-overlay").classList.add("show");
+function decodeBase64() {
+    let input = document.getElementById("cyber-input").value;
+    document.getElementById("cyber-output").innerText = atob(input);
 }
 
-function closeAIChat() {
-  document.getElementById("ai-chat-overlay").classList.remove("show");
+function urlEncode() {
+    let input = document.getElementById("cyber-input").value;
+    document.getElementById("cyber-output").innerText =
+        encodeURIComponent(input);
 }
 
-makeDraggable(
-  document.getElementById("ai-box"),
-  document.getElementById("drag-bar")
-);
+function generatePassword() {
+    const chars =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*";
+    let password = "";
 
-function makeDraggable(box, handle) {
-  let offsetX = 0;
-  let offsetY = 0;
-  let isDragging = false;
+    for (let i = 0; i < 16; i++) {
+        password += chars.charAt(
+            Math.floor(Math.random() * chars.length)
+        );
+    }
 
-  handle.addEventListener("mousedown", (e) => {
-    isDragging = true;
+    document.getElementById("cyber-output").innerText = password;
+}
 
-    offsetX = e.clientX - box.offsetLeft;
-    offsetY = e.clientY - box.offsetTop;
-  });
+async function generateHash() {
+    let input = document.getElementById("cyber-input").value;
 
-  document.addEventListener("mousemove", (e) => {
-    if (!isDragging) return;
+    const msgBuffer = new TextEncoder().encode(input);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
 
-    box.style.position = "fixed";
-    box.style.left = e.clientX - offsetX + "px";
-    box.style.top = e.clientY - offsetY + "px";
-  });
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b =>
+        b.toString(16).padStart(2, "0")
+    ).join("");
 
-  document.addEventListener("mouseup", () => {
-    isDragging = false;
-  });
+    document.getElementById("cyber-output").innerText = hashHex;
 }

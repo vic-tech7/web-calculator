@@ -211,59 +211,44 @@ footer{
     display: none;
     position: fixed;
     top: 80px;
-    left: 120px;
-    z-index: 3000;
-    background: transparent;
-    width: auto;
-    height: auto;
-}
-
-#ai-chat-overlay.show {
-    display: block;
+    left: 100px;
+    z-index: 9999;
 }
 
 #ai-box {
     width: 720px;
     max-width: 95vw;
+    padding: 20px;
+    border-radius: 18px;
     background: linear-gradient(145deg, #050505, #111827);
     border: 2px solid #00e5ff;
-    border-radius: 18px;
-    padding: 18px;
     box-shadow:
         0 0 15px #00e5ff,
-        0 0 35px #7c3aed,
-        0 0 55px #ffe600;
+        0 0 30px #7c3aed,
+        0 0 45px #ffe600;
 }
 
-/* DRAG BAR */
 #drag-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 12px;
+    margin-bottom: 15px;
+    cursor: move;
+    user-select: none;
     border-radius: 12px;
-    background: linear-gradient(90deg, #00e5ff, #7c3aed, #ffe600);
+    background: linear-gradient(90deg,#00e5ff,#7c3aed,#ffe600);
     color: black;
     font-weight: bold;
-    cursor: move;
-    margin-bottom: 15px;
-    user-select: none;
 }
 
-#drag-move-btn {
-    background: black;
-    color: #00e5ff;
+#move-btn {
+    width: 80px;
     min-height: 40px;
-    width: 70px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px #00e5ff;
 }
 
-.utility-section {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    margin-top: 25px;
+#ai-chat-overlay.show {
+    display: block;
 }
 
 .util-btn {
@@ -275,4 +260,45 @@ footer{
     background: rgba(0,0,0,0.35);
     border: 1px solid #00e5ff;
     box-shadow: 0 0 12px #00e5ff;
+}
+
+.history-panel {
+    overflow-y: auto;
+    padding-bottom: 80px;
+}
+
+.utility-section {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.cyber-box {
+    max-height: 85vh;
+    overflow-y: auto;
+    width: 700px;
+    max-width: 95%;
+    background: linear-gradient(145deg,#050505,#0f172a);
+    border: 2px solid #00e5ff;
+    box-shadow: 0 0 20px #00e5ff;
+}
+
+#cyber-input {
+    width: 100%;
+    min-height: 120px;
+    margin: 15px 0;
+    background: #111;
+    color: white;
+    border: 1px solid #00e5ff;
+    border-radius: 12px;
+    padding: 12px;
+}
+
+#cyber-output {
+    margin-top: 20px;
+    padding: 15px;
+    background: #111;
+    border-radius: 12px;
+    min-height: 80px;
+    word-wrap: break-word;
 }
