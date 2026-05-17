@@ -26,6 +26,10 @@
         <button class="util-btn" onclick="openAISecurityAssistant()">AI Assistant</button>
         <button class="util-btn" onclick="changeBackground()">Dynamic Wallpaper</button>
         <button class="util-btn" onclick="openContactPage()">Contact CHAD FDEV</button>
+        <button class="util-btn" onclick="window.open('https://github.com/vic-tech7')">My GitHub</button>
+        <button class="util-btn" onclick="window.location.reload()">Refresh App</button>
+        <button class="util-btn" onclick="window.print()">Save as PDF</button>
+        <button class="util-btn" onclick="alert('Dark mode already active 😎')">Theme Mode</button>
     </div>
 </div>
 
@@ -88,10 +92,13 @@
     <div id="ai-box" class="ai-box">
 
         <div id="drag-bar">
-            <span>VECTOR AI Assistant</span>
-            <button onclick="closeAIChat()" id="close-ai-btn">✖</button>
-        </div>
+    <span>VEC AI Assistant</span>
 
+    <div>
+        <button id="drag-move-btn">MOVE</button>
+        <button onclick="closeAIChat()" id="close-ai-btn">✖</button>
+    </div>
+</div>
         <div id="ai-chat-messages"></div>
 
         <textarea id="ai-user-input" placeholder="Ask anything..."></textarea>

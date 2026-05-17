@@ -304,46 +304,40 @@ function closeContactPage(){
     document.getElementById("contact-overlay").style.display="none";
 }
 
-function openAISecurityAssistant(){
-    document.getElementById("ai-chat-overlay").style.display="block";
+function openAISecurityAssistant() {
+  document.getElementById("ai-chat-overlay").classList.add("show");
 }
 
-function closeAIChat(){
-    document.getElementById("ai-chat-overlay").style.display="none";
+function closeAIChat() {
+  document.getElementById("ai-chat-overlay").classList.remove("show");
 }
 
-dragElement(document.getElementById("ai-box"));
+makeDraggable(
+  document.getElementById("ai-box"),
+  document.getElementById("drag-bar")
+);
 
-function dragElement(elmnt) {
-    let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+function makeDraggable(box, handle) {
+  let offsetX = 0;
+  let offsetY = 0;
+  let isDragging = false;
 
-    document.getElementById("drag-bar").onmousedown = dragMouseDown;
+  handle.addEventListener("mousedown", (e) => {
+    isDragging = true;
 
-    function dragMouseDown(e) {
-        e.preventDefault();
+    offsetX = e.clientX - box.offsetLeft;
+    offsetY = e.clientY - box.offsetTop;
+  });
 
-        pos3 = e.clientX;
-        pos4 = e.clientY;
+  document.addEventListener("mousemove", (e) => {
+    if (!isDragging) return;
 
-        document.onmouseup = closeDragElement;
-        document.onmousemove = elementDrag;
-    }
+    box.style.position = "fixed";
+    box.style.left = e.clientX - offsetX + "px";
+    box.style.top = e.clientY - offsetY + "px";
+  });
 
-    function elementDrag(e) {
-        e.preventDefault();
-
-        pos1 = pos3 - e.clientX;
-        pos2 = pos4 - e.clientY;
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-
-        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
-        elmnt.style.position = "absolute";
-    }
-
-    function closeDragElement() {
-        document.onmouseup = null;
-        document.onmousemove = null;
-    }
+  document.addEventListener("mouseup", () => {
+    isDragging = false;
+  });
 }
