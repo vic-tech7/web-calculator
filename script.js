@@ -154,11 +154,11 @@ function closeUnitConverter() {
 /* ---------------- AI ---------------- */
 
 function openAISecurityAssistant() {
-  document.getElementById("ai-chat-overlay").classList.add("show");
+    document.getElementById("ai-chat-overlay").classList.add("show");
 }
 
 function closeAIChat() {
-  document.getElementById("ai-chat-overlay").classList.remove("show");
+    document.getElementById("ai-chat-overlay").classList.remove("show");
 }
 
 const aiBox = document.getElementById("ai-box");
@@ -288,6 +288,9 @@ function openCybertic() {
 function closeCybertic() {
     document.getElementById("cybertic-overlay").style.display = "none";
 }
+
+window.openCybertic = openCybertic;
+window.closeCybertic = closeCybertic;
 
 function encodeBase64() {
     let input = document.getElementById("cyber-input").value;
