@@ -366,3 +366,14 @@ footer{
 
     min-height: 100px;
 }
+
+.cyber-box button {
+    width: 100%;
+    margin-top: 10px;
+    background: linear-gradient(90deg, #8b0000, #ff0000);
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 12px red;
+}

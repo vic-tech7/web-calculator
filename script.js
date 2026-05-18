@@ -335,3 +335,93 @@ async function generateHash() {
 
     document.getElementById("cyber-output").innerText = hashHex;
 }
+
+function getCyberInput() {
+    return document.getElementById("cyber-input").value;
+}
+
+function setCyberOutput(text) {
+    document.getElementById("cyber-output").innerText = text;
+}
+
+function reverseText() {
+    setCyberOutput(
+        getCyberInput().split("").reverse().join("")
+    );
+}
+
+function textToBinary() {
+    const text = getCyberInput();
+
+    const binary = text
+        .split("")
+        .map(char => char.charCodeAt(0).toString(2))
+        .join(" ");
+
+    setCyberOutput(binary);
+}
+
+function binaryToText() {
+    try {
+        const text = getCyberInput()
+            .split(" ")
+            .map(bin => String.fromCharCode(parseInt(bin, 2)))
+            .join("");
+
+        setCyberOutput(text);
+    } catch {
+        setCyberOutput("Invalid binary");
+    }
+}
+
+function generateUUID() {
+    const uuid = crypto.randomUUID();
+    setCyberOutput(uuid);
+}
+
+function randomNumber() {
+    const num = Math.floor(Math.random() * 1000000);
+    setCyberOutput(num.toString());
+}
+
+function countWords() {
+    const words = getCyberInput()
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean).length;
+
+    setCyberOutput("Words: " + words);
+}
+
+function removeSpaces() {
+    setCyberOutput(
+        getCyberInput().replace(/\s+/g, "")
+    );
+}
+
+function jsonFormatter() {
+    try {
+        const formatted = JSON.stringify(
+            JSON.parse(getCyberInput()),
+            null,
+            4
+        );
+
+        setCyberOutput(formatted);
+    } catch {
+        setCyberOutput("Invalid JSON");
+    }
+}
+
+function copyOutput() {
+    const output =
+        document.getElementById("cyber-output").innerText;
+
+    navigator.clipboard.writeText(output);
+    alert("Copied!");
+}
+
+function clearCyber() {
+    document.getElementById("cyber-input").value = "";
+    document.getElementById("cyber-output").innerText = "";
+}
